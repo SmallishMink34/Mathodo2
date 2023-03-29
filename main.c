@@ -1,38 +1,62 @@
 /**
  * \file main.c
- * \brief Programme principal initial du niveau 0
+ * \brief Programme principal initial du niveau 1
  * \author Mathieu Constant
  * \version 1.0
- * \date 18 mars 2020
+ * \date 18 mars 2021
  */
 
 #include "sdl2-light.h"
+#include <stdio.h>
+
+/**
+ * \brief Largeur de l'écran de jeu
+ */
+#define SCREEN_WIDTH 300
+
+/**
+ * \brief Hauteur de l'écran de jeu
+ */
+#define SCREEN_HEIGHT 480
 
 
 /**
- * \brief Largeur de l'écran
-*/
+ * \brief Taille d'un vaisseau
+ */
 
+#define SHIP_SIZE 32
 
-#define SCREEN_WIDTH 320
 
 /**
- * \brief Hauteur de l'écran
+ * \brief Taille d'un météorite
 */
 
-#define SCREEN_HEIGHT 240
+#define METEORITE_SIZE 32
+
 
 /**
- * \brief Taille du sprite
-*/
+ * \brief Hauteur de la ligne d'arrivée
+ */
 
-#define SPRITE_SIZE 32
+
+#define FINISH_LINE_HEIGHT 10
+
 
 /**
- * \brief Pas de déplacement du sprite
+ * \brief Pas de déplacement horizontal du vaisseau
 */
 
-#define MOVING_STEP 5
+#define MOVING_STEP 10
+
+
+/**
+  * \brief Vitesse initiale de déplacement vertical des éléments du jeu 
+*/
+
+#define INITIAL_SPEED 2
+
+
+
 
 /**
  * \brief Représentation pour stocker les textures nécessaires à l'affichage graphique
@@ -164,13 +188,13 @@ void clean_textures(textures_t *textures){
 
 
 /**
- * \brief La fonction initialise les texures
+ * \brief La fonction initialise les textures nécessaires à l'affichage graphique du jeu
  * \param screen la surface correspondant à l'écran de jeu
  * \param textures les textures du jeu
 */
 
 void  init_textures(SDL_Renderer *renderer, textures_t *textures){
-    textures->background = load_image( "ressources/background.bmp",renderer);
+    textures->background = load_image( "ressources/space-background.bmp",renderer);
     
     /* A COMPLETER */
 
@@ -181,12 +205,12 @@ void  init_textures(SDL_Renderer *renderer, textures_t *textures){
 /**
  * \brief La fonction applique la texture du fond sur le renderer lié à l'écran de jeu
  * \param renderer le renderer
- * \param textures les textures du jeu
+ * \param texture la texture liée au fond
 */
 
-void apply_background(SDL_Renderer *renderer, textures_t *textures){
-    if(textures->background != NULL){
-      apply_texture(textures->background, renderer, 0, 0);
+void apply_background(SDL_Renderer *renderer, SDL_Texture *texture){
+    if(texture != NULL){
+      apply_texture(texture, renderer, 0, 0);
     }
 }
 
@@ -196,9 +220,9 @@ void apply_background(SDL_Renderer *renderer, textures_t *textures){
 
 /**
  * \brief La fonction rafraichit l'écran en fonction de l'état des données du monde
- * \param renderer le renderer
+ * \param renderer le renderer lié à l'écran de jeu
  * \param world les données du monde
- * \param textures les textures du jeu
+ * \param textures les textures
  */
 
 void refresh_graphics(SDL_Renderer *renderer, world_t *world,textures_t *textures){
@@ -207,7 +231,7 @@ void refresh_graphics(SDL_Renderer *renderer, world_t *world,textures_t *texture
     clear_renderer(renderer);
     
     //application des textures dans le renderer
-    apply_background(renderer, textures);
+    apply_background(renderer, textures->background);
     /* A COMPLETER */
     
     // on met à jour l'écran
@@ -237,7 +261,7 @@ void clean(SDL_Window *window, SDL_Renderer * renderer, textures_t *textures, wo
  * \param window la fenêtre du jeu
  * \param renderer le renderer
  * \param textures les textures
- * \param wordl le monde
+ * \param world le monde
  */
 
 void init(SDL_Window **window, SDL_Renderer ** renderer, textures_t *textures, world_t * world){
