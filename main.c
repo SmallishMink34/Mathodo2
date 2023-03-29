@@ -65,6 +65,7 @@
 struct textures_s{
     SDL_Texture* background; /*!< Texture liée à l'image du fond de l'écran. */
     SDL_Texture* ship; /*!< Texture liée à l'image du vaisseau. */
+    SDL_Texture* meteorite; /*!< Texture liée à l'image du météorite. */
     /* A COMPLETER */
 };
 
@@ -95,8 +96,9 @@ typedef struct sprite_s sprite_t;
 
 struct world_s{
     sprite_t *vaisseau ; /*!< Représentation du vaisseau */
-    
+    sprite_t *mur; /*!< Représentation du météorite */
     int gameover; /*!< Champ indiquant si l'on est à la fin du jeu */
+    int speed_h; /*!< Vitesse de déplacement horizontal des éléments du jeu */
 
 };
 
@@ -116,6 +118,21 @@ void print_sprite(sprite_t *sprite){
     printf("x = %d, y = %d, w = %d, h = %d\n", sprite->x, sprite->y, sprite->w, sprite->h);
 }
 
+/**
+ * \brief La fonction initialise les sprites du jeu
+ * 
+ * \param sprite 
+ * \param x 
+ * \param y 
+ * \param w 
+ * \param h 
+ */
+void init_sprite(sprite_t *sprite, int x, int y, int w, int h){
+    sprite->x = x;
+    sprite->y = y;
+    sprite->w = w;
+    sprite->h = h;
+}
 
 /**
  * \brief La fonction initialise les données du monde du jeu
@@ -127,13 +144,13 @@ void init_data(world_t * world){
     
     //on n'est pas à la fin du jeu
     world->gameover = 0;
+    world->speed_h = 0;
 
     // Initialisation du vaisseau
     world->vaisseau = malloc(sizeof(sprite_t));
-    world->vaisseau->x = SCREEN_WIDTH/2 - SHIP_SIZE/2;
-    world->vaisseau->y = SCREEN_HEIGHT - SHIP_SIZE;
-    world->vaisseau->w = SHIP_SIZE;
-    world->vaisseau->h = SHIP_SIZE;
+    world->mur = malloc(sizeof(sprite_t));
+    init_sprite(world->vaisseau, SCREEN_WIDTH/2 - SHIP_SIZE/2, SCREEN_HEIGHT - SHIP_SIZE, SHIP_SIZE, SHIP_SIZE);
+    init_sprite(world->mur, 0, 0, 3*METEORITE_SIZE, 7*METEORITE_SIZE);
 
     print_sprite(world->vaisseau);
 }
@@ -172,7 +189,8 @@ int is_game_over(world_t *world){
  */
 
 void update_data(world_t *world){
-    /* A COMPLETER */
+    printf("%d\n", world->speed_h);
+    world->mur->y += INITIAL_SPEED - world->speed_h;
 }
 
 
@@ -207,15 +225,22 @@ void handle_events(SDL_Event *event,world_t *world){
                 break;
             case SDLK_z:
                 world->vaisseau->y -= MOVING_STEP;
+                world->speed_h = 3;
                 break;
             case SDLK_s:
                 world->vaisseau->y += MOVING_STEP;
+                world->speed_h = -3;
                 break;
+            case SDLK_ESCAPE:
+                world->gameover = 1;
+                break; 
              default:
                 break;
              }
              print_sprite(world->vaisseau);
              
+        }else if(event->type == SDL_KEYUP){
+            world->speed_h = 0;
         }
         
     }
@@ -244,6 +269,7 @@ void clean_textures(textures_t *textures){
 void  init_textures(SDL_Renderer *renderer, textures_t *textures){
     textures->background = load_image( "ressources/space-background.bmp",renderer);
     textures->ship = load_image( "ressources/spaceship.bmp",renderer);
+    textures->meteorite = load_image( "ressources/meteorite.bmp",renderer);
     
     /* A COMPLETER */
 
@@ -274,6 +300,16 @@ void apply_sprite(SDL_Renderer * renderer, SDL_Texture *texture, sprite_t *sprit
     }
 }
 
+void apply_wall(SDL_Renderer * renderer, SDL_Texture *texture, int x, int y){
+    if(texture != NULL){
+        SDL_Rect rect;
+        rect.x = x;
+        rect.y = y;
+        rect.w = METEORITE_SIZE;
+        rect.h = METEORITE_SIZE;
+        SDL_RenderCopy(renderer, texture, NULL, &rect);
+    }
+}
 
 
 /**
@@ -284,7 +320,7 @@ void apply_sprite(SDL_Renderer * renderer, SDL_Texture *texture, sprite_t *sprit
  */
 
 void refresh_graphics(SDL_Renderer *renderer, world_t *world,textures_t *textures){
-    
+
     //on vide le renderer
     clear_renderer(renderer);
     
@@ -292,7 +328,14 @@ void refresh_graphics(SDL_Renderer *renderer, world_t *world,textures_t *texture
     apply_background(renderer, textures->background);
     /* A COMPLETER */
     apply_sprite(renderer, textures->ship, world->vaisseau);
+
+    for (int i = 0; i < world->mur->w/METEORITE_SIZE ; i++){
+        for (int i2 = 0; i2 < world->mur->h/METEORITE_SIZE ; i2++){
+            apply_wall(renderer, textures->meteorite, world->mur->x+i*METEORITE_SIZE, world->mur->y+i2*METEORITE_SIZE);
+        }
+    }
     
+
     // on met à jour l'écran
     update_screen(renderer);
 }
