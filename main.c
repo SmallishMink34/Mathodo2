@@ -64,6 +64,7 @@
 
 struct textures_s{
     SDL_Texture* background; /*!< Texture liée à l'image du fond de l'écran. */
+    SDL_Texture* ship; /*!< Texture liée à l'image du vaisseau. */
     /* A COMPLETER */
 };
 
@@ -76,13 +77,24 @@ typedef struct textures_s textures_t;
 
 
 /**
+ * \brief Représentation pour stocker les données du vaisseau
+ * 
+ */
+struct sprite_s{
+    int x;
+    int y;
+    int w;
+    int h;
+};
+
+typedef struct sprite_s sprite_t;
+
+/**
  * \brief Représentation du monde du jeu
 */
 
 struct world_s{
-    /*
-      A COMPLETER
-     */
+    sprite_t *vaisseau ; /*!< Représentation du vaisseau */
     
     int gameover; /*!< Champ indiquant si l'on est à la fin du jeu */
 
@@ -95,7 +107,14 @@ struct world_s{
 typedef struct world_s world_t;
 
 
+/**
+ * \brief Fonction qui affiche les données du vaisseau
+ * 
+ */
 
+void print_sprite(sprite_t *sprite){
+    printf("x = %d, y = %d, w = %d, h = %d\n", sprite->x, sprite->y, sprite->w, sprite->h);
+}
 
 
 /**
@@ -108,8 +127,18 @@ void init_data(world_t * world){
     
     //on n'est pas à la fin du jeu
     world->gameover = 0;
-    
+
+    // Initialisation du vaisseau
+    world->vaisseau = malloc(sizeof(sprite_t));
+    world->vaisseau->x = SCREEN_WIDTH/2 - SHIP_SIZE/2;
+    world->vaisseau->y = SCREEN_HEIGHT - SHIP_SIZE;
+    world->vaisseau->w = SHIP_SIZE;
+    world->vaisseau->h = SHIP_SIZE;
+
+    print_sprite(world->vaisseau);
 }
+
+
 
 
 /**
@@ -120,7 +149,7 @@ void init_data(world_t * world){
 
 void clean_data(world_t *world){
     /* utile uniquement si vous avez fait de l'allocation dynamique (malloc); la fonction ici doit permettre de libérer la mémoire (free) */
-    
+    free(world->vaisseau);
 }
 
 
@@ -167,10 +196,28 @@ void handle_events(SDL_Event *event,world_t *world){
          //si une touche est appuyée
          if(event->type == SDL_KEYDOWN){
              //si la touche appuyée est 'D'
-             if(event->key.keysym.sym == SDLK_d){
-                 printf("La touche D est appuyée\n");
-              }
-         }
+
+             switch (event->key.keysym.sym)
+             {
+             case SDLK_d:
+                world->vaisseau->x += MOVING_STEP;
+                break;
+            case SDLK_q:
+                world->vaisseau->x -= MOVING_STEP;
+                break;
+            case SDLK_z:
+                world->vaisseau->y -= MOVING_STEP;
+                break;
+            case SDLK_s:
+                world->vaisseau->y += MOVING_STEP;
+                break;
+             default:
+                break;
+             }
+             print_sprite(world->vaisseau);
+             
+        }
+        
     }
 }
 
@@ -182,6 +229,7 @@ void handle_events(SDL_Event *event,world_t *world){
 
 void clean_textures(textures_t *textures){
     clean_texture(textures->background);
+    clean_texture(textures->ship);
     /* A COMPLETER */
 }
 
@@ -195,6 +243,7 @@ void clean_textures(textures_t *textures){
 
 void  init_textures(SDL_Renderer *renderer, textures_t *textures){
     textures->background = load_image( "ressources/space-background.bmp",renderer);
+    textures->ship = load_image( "ressources/spaceship.bmp",renderer);
     
     /* A COMPLETER */
 
@@ -214,7 +263,16 @@ void apply_background(SDL_Renderer *renderer, SDL_Texture *texture){
     }
 }
 
-
+void apply_sprite(SDL_Renderer * renderer, SDL_Texture *texture, sprite_t *sprite){
+    if(texture != NULL){
+        SDL_Rect rect;
+        rect.x = sprite->x;
+        rect.y = sprite->y;
+        rect.w = sprite->w;
+        rect.h = sprite->h;
+        SDL_RenderCopy(renderer, texture, NULL, &rect);
+    }
+}
 
 
 
@@ -233,6 +291,7 @@ void refresh_graphics(SDL_Renderer *renderer, world_t *world,textures_t *texture
     //application des textures dans le renderer
     apply_background(renderer, textures->background);
     /* A COMPLETER */
+    apply_sprite(renderer, textures->ship, world->vaisseau);
     
     // on met à jour l'écran
     update_screen(renderer);
