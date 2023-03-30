@@ -1,28 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "../Sprites/sprites.h"
+#include "../../constante.c"
 /**
  * \brief Fichier qui contient les données du monde du jeu
  * 
  */
 
-#include "../../constante.c"
-
 #ifndef WORLD_H
 #define WORLD_H
 
-/**
- * \brief Représentation pour stocker les données du vaisseau ou autre sprites
- * 
- */
-
-struct sprite_s{
-    int x;
-    int y;
-    int w;
-    int h;
-};
-
-typedef struct sprite_s sprite_t;
 
 /**
  * \brief Représentation du monde du jeu
@@ -48,16 +35,23 @@ void update_data(world_t *world);
  * \param sprite 
  * \return int 0 si le sprite est dans l'écran, 1 sinon
  */
-int isOverScreen(sprite_t *sprite);
 
 int is_game_over(world_t *world);
 
-void print_sprite(sprite_t *sprite);
-
-sprite_t *init_sprite(sprite_t *sprite, int x, int y, int w, int h);
-
+/**
+ * \brief La fonction initialise les données du monde
+ * 
+ * \param world 
+ */
 void init_data(world_t * world);
 
+/**
+ * \brief La fonction libère les données du monde
+ * 
+ * \param world 
+ */
 void clean_data(world_t * world);
+
+void handle_sprite_collide(sprite_t *sp1, sprite_t *sp2, world_t *world, int make_disappear);
 
 #endif

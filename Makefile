@@ -3,8 +3,8 @@ LDFLAGS = -lm -lmingw32 -lSDL2main -lSDL2
 SDL2_INCLUDE_DIR = src/include
 SDL2_LIBRARIES_DIR = src/lib
 
-INC = sdl2-light.h library/Display/Display.h library/World/world.h
-SRC = main.c sdl2-light.c library/Display/Display.c library/World/world.c
+INC = sdl2-light.h library/Display/Display.h library/World/world.h library/Sprites/sprites.h
+SRC = main.c sdl2-light.c library/Display/Display.c library/World/world.c library/Sprites/sprites.c
 
 OBJ = $(SRC:%.c=%.o)
 

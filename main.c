@@ -49,11 +49,9 @@ void handle_events(SDL_Event *event,world_t *world){
                 world->vaisseau->x -= MOVING_STEP;
                 break;
             case SDLK_z:
-                world->vaisseau->y -= MOVING_STEP;
                 world->speed_h = 3;
                 break;
             case SDLK_s:
-                world->vaisseau->y += MOVING_STEP;
                 world->speed_h = -3;
                 break;
             case SDLK_ESCAPE:
