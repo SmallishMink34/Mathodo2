@@ -8,6 +8,7 @@
 
 #include "sdl2-light.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include "library/Display/Display.h"
 #include "library/World/world.h"
 
@@ -41,6 +42,7 @@ void handle_events(SDL_Event *event,world_t *world){
              switch (event->key.keysym.sym)
              {
              case SDLK_d:
+             
                 world->vaisseau->x += MOVING_STEP;
                 break;
             case SDLK_q:

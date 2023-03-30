@@ -1,6 +1,8 @@
 #include "../../sdl2-light.h"
 #include "../World/world.h"
 #include "../../constante.c"
+#include <stdio.h>
+#include <stdlib.h>
 
 #ifndef DISPLAY_H
 #define DISPLAY_H

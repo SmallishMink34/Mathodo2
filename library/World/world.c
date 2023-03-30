@@ -8,6 +8,14 @@
 void update_data(world_t *world){
     world->ligneArriver->y += INITIAL_SPEED - world->speed_h;
     world->mur->y += INITIAL_SPEED - world->speed_h;
+
+    if (isOverScreen(world->vaisseau)){
+        if (world->vaisseau->x < 0) world->vaisseau->x = 0;
+        if (world->vaisseau->x + world->vaisseau->w > SCREEN_WIDTH) world->vaisseau->x = SCREEN_WIDTH - world->vaisseau->w;
+        if (world->vaisseau->y < 0) world->vaisseau->y = 0;
+        if (world->vaisseau->y + world->vaisseau->h > SCREEN_HEIGHT) world->vaisseau->y = SCREEN_HEIGHT - world->vaisseau->h;
+        
+    }
 }
 
 /**
@@ -18,6 +26,13 @@ void update_data(world_t *world){
 
 int is_game_over(world_t *world){
     return world->gameover;
+}
+
+int isOverScreen(sprite_t *sprite){
+    if(sprite->x < 0 || sprite->x + sprite->w > SCREEN_WIDTH || sprite->y < 0 || sprite->y + sprite->h > SCREEN_HEIGHT){
+        return 1;
+    }
+    return 0;
 }
 
 void print_sprite(sprite_t *sprite){
