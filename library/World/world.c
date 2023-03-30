@@ -6,16 +6,16 @@
  */
 
 void update_data(world_t *world){
-    world->ligneArriver->y += INITIAL_SPEED - world->speed_h;
-    world->mur->y += INITIAL_SPEED - world->speed_h;
+    world->ligneArriver->y += world->speed_h;
+    world->mur->y += world->speed_h;
 
     if (isOverScreen(world->vaisseau)){
         if (world->vaisseau->x < 0) world->vaisseau->x = 0;
         if (world->vaisseau->x + world->vaisseau->w > SCREEN_WIDTH) world->vaisseau->x = SCREEN_WIDTH - world->vaisseau->w;
         if (world->vaisseau->y < 0) world->vaisseau->y = 0;
         if (world->vaisseau->y + world->vaisseau->h > SCREEN_HEIGHT) world->vaisseau->y = SCREEN_HEIGHT - world->vaisseau->h;
-        
     }
+    handle_sprite_collide(world->vaisseau, world->mur, world);
 }
 
 /**
@@ -28,35 +28,6 @@ int is_game_over(world_t *world){
     return world->gameover;
 }
 
-int isOverScreen(sprite_t *sprite){
-    if(sprite->x < 0 || sprite->x + sprite->w > SCREEN_WIDTH || sprite->y < 0 || sprite->y + sprite->h > SCREEN_HEIGHT){
-        return 1;
-    }
-    return 0;
-}
-
-void print_sprite(sprite_t *sprite){
-    printf("x = %d, y = %d, w = %d, h = %d\n", sprite->x, sprite->y, sprite->w, sprite->h);
-}
-
-/**
- * \brief La fonction initialise les sprites du jeu
- * 
- * \param sprite 
- * \param x 
- * \param y 
- * \param w 
- * \param h 
- */
-sprite_t *init_sprite(sprite_t *sprite, int x, int y, int w, int h){
-    sprite = malloc(sizeof(sprite_t));
-    sprite->x = x;
-    sprite->y = y;
-    sprite->w = w;
-    sprite->h = h;
-    return sprite;
-}
-
 /**
  * \brief La fonction initialise les données du monde du jeu
  * \param world les données du monde
@@ -67,7 +38,7 @@ void init_data(world_t * world){
     
     //on n'est pas à la fin du jeu
     world->gameover = 0;
-    world->speed_h = 0;
+    world->speed_h = INITIAL_SPEED;
 
     // Initialisation du vaisseau
     world->vaisseau = init_sprite(world->vaisseau, SCREEN_WIDTH/2 - SHIP_SIZE/2, SCREEN_HEIGHT - SHIP_SIZE, SHIP_SIZE, SHIP_SIZE);
@@ -89,4 +60,11 @@ void clean_data(world_t *world){
     free(world->vaisseau);
 }
 
-
+void handle_sprite_collide(sprite_t *sp1, sprite_t *sp2, world_t *world, int make_disappear){
+    if (sprites_collide(sp1, sp2)){
+        world->speed_h = 0;
+        
+    }else{
+        world->speed_h = INITIAL_SPEED;
+    }
+}
