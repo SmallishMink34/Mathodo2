@@ -28,30 +28,43 @@ struct world_s{
 
 typedef struct world_s world_t;
 
+/**
+ * \brief La fonction met à jour les données en tenant compte de la physique du monde
+ * \param les données du monde
+ */
 void update_data(world_t *world);
 /**
  * \brief La fonction indique si le jeu est fini en fonction des données du monde
- * 
- * \param sprite 
- * \return int 0 si le sprite est dans l'écran, 1 sinon
+ * \param world les données du monde
+ * \return 1 si le jeu est fini, 0 sinon
  */
 
 int is_game_over(world_t *world);
 
 /**
- * \brief La fonction initialise les données du monde
- * 
- * \param world 
+
+/**
+ * \brief La fonction initialise les données du monde du jeu
+ * \param world les données du monde
  */
+
 void init_data(world_t * world);
 
 /**
  * \brief La fonction libère les données du monde
  * 
- * \param world 
+ * \param world les données du monde
  */
 void clean_data(world_t * world);
 
+/**
+ * \brief La fonction indique si le sprite est en collision avec un autre sprite
+ * 
+ * \param sp1 
+ * \param sp2 
+ * \param world 
+ * \param make_disappear 
+ */
 void handle_sprite_collide(sprite_t *sp1, sprite_t *sp2, world_t *world, int make_disappear);
 
 #endif
