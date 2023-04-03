@@ -1,9 +1,6 @@
 #include "world.h"
 
-/**
- * \brief La fonction met à jour les données en tenant compte de la physique du monde
- * \param les données du monde
- */
+
 
 void update_data(world_t *world){
     world->ligneArriver->y += world->speed_h;
@@ -15,23 +12,14 @@ void update_data(world_t *world){
         if (world->vaisseau->y < 0) world->vaisseau->y = 0;
         if (world->vaisseau->y + world->vaisseau->h > SCREEN_HEIGHT) world->vaisseau->y = SCREEN_HEIGHT - world->vaisseau->h;
     }
-    handle_sprite_collide(world->vaisseau, world->mur, world);
+    handle_sprite_collide(world->vaisseau, world->mur, world, 0);
 }
 
-/**
- * \brief La fonction indique si le jeu est fini en fonction des données du monde
- * \param world les données du monde
- * \return 1 si le jeu est fini, 0 sinon
- */
+
 
 int is_game_over(world_t *world){
     return world->gameover;
 }
-
-/**
- * \brief La fonction initialise les données du monde du jeu
- * \param world les données du monde
- */
 
 
 void init_data(world_t * world){
@@ -49,16 +37,16 @@ void init_data(world_t * world){
 }
 
 
-/**
- * \brief La fonction nettoie les données du monde
- * \param world les données du monde
- */
 
 
 void clean_data(world_t *world){
     /* utile uniquement si vous avez fait de l'allocation dynamique (malloc); la fonction ici doit permettre de libérer la mémoire (free) */
     free(world->vaisseau);
+    free(world->mur);
+    free(world->ligneArriver);
+    printf("clean_data");   
 }
+
 
 void handle_sprite_collide(sprite_t *sp1, sprite_t *sp2, world_t *world, int make_disappear){
     if (sprites_collide(sp1, sp2)){
