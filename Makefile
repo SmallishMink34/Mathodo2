@@ -20,6 +20,9 @@ doc: $(PROG)
 	doxygen $(PROG)
 
 .PHONY: clean
+
+start: 
+	$(PROG)
 clean:
 	del /f /q *.o *~ $(PROG)
 	rd /s /q latex html

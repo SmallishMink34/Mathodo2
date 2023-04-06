@@ -12,6 +12,8 @@
 
 #ifndef Utility_h
 #define Utility_h
+#define MAX_LINES 1000
+#define MAX_LENGTH 200
 
 /**
  * \brief Concatène plusieurs chaines de caractères
@@ -30,5 +32,15 @@ char * strcats(char* dest, int num_args, ...);
  * \return char* 
  */
 char * int_to_str(int n);
+
+/**
+ * \brief Lit un fichier et retourne un tableau de lignes
+ * 
+ * \param filename  Le nom du fichier
+ * \param num_lines  Le nombre de lignes
+ * \return char** 
+ */
+
+char ** lirefile(char *filename, int *num_lines);
 
 #endif

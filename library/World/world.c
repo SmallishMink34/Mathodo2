@@ -1,5 +1,5 @@
 #include "world.h"
-
+#include "../utility/utility.h"
 
 void update_data(world_t *world){
     world->ligneArriver->y += (int)world->speed_h;
@@ -65,14 +65,21 @@ int handle_sprite_collide(sprite_t *sp1, sprite_t *sp2, world_t *world, int make
 
 
 void init_walls(world_t *world){
-    world->nb_murs = 6;
-    world->murs = malloc(sizeof(sprite_t) * 10);
-    world->murs[0] = init_sprite(world->murs[0], 48, 0, 3*METEORITE_SIZE, 6*METEORITE_SIZE);
-    world->murs[1] = init_sprite(world->murs[1], 252, 0, 3*METEORITE_SIZE, 6*METEORITE_SIZE);
-    world->murs[2] = init_sprite(world->murs[2], 16, -352, 1*METEORITE_SIZE, 5*METEORITE_SIZE);
-    world->murs[3] = init_sprite(world->murs[3], 188, -352, 7*METEORITE_SIZE, 5*METEORITE_SIZE);
-    world->murs[4] = init_sprite(world->murs[4], 48, -672, 3*METEORITE_SIZE, 6*METEORITE_SIZE);
-    world->murs[5] = init_sprite(world->murs[5], 252, -672, 3*METEORITE_SIZE, 6*METEORITE_SIZE);
+    world->nb_murs = 0;
+    world->murs = malloc(sizeof(sprite_t) * MAX_LENGTH*MAX_LINES);
+    int nblignes = 0;
+    char **txt = lirefile("maps/default.txt", &nblignes);
+    printf("aaiaa");
+    for (int i = 0; i < nblignes; i++) {
+        for (int j = 0; j < 26; j++) {
+            if (txt[i][j] == '1'){
+                world->murs[world->nb_murs] = init_sprite(world->murs[world->nb_murs], j*METEORITE_SIZE, i*METEORITE_SIZE, METEORITE_SIZE, METEORITE_SIZE);
+                world->nb_murs++;
+            }
+        }
+        printf("%s\n", txt[i]);
+    }
+    printf("aaaa");
 
 }
 

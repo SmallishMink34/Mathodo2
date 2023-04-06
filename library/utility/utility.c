@@ -22,3 +22,23 @@ char * int_to_str(int n) {
     sprintf(str, "%d", n);
     return str;
 }
+
+char **lirefile(char *filename, int *num_lines) {
+    FILE *file = fopen(filename, "r");
+    if (file == NULL) {
+        perror("Error opening file");
+        return NULL;
+    }
+
+    char **lines = malloc(MAX_LINES * sizeof(char *));
+    *num_lines = 0;
+    char buffer[MAX_LENGTH];
+    while (fgets(buffer, MAX_LENGTH, file) != NULL && *num_lines < MAX_LINES) {
+        lines[*num_lines] = malloc(MAX_LENGTH * sizeof(char));
+        sprintf(lines[*num_lines], "%s", buffer);
+        (*num_lines)++;
+    }
+
+    fclose(file);
+    return lines;
+}
