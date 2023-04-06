@@ -67,6 +67,7 @@ void refresh_graphics(SDL_Renderer *renderer, world_t *world,ressources_t *textu
     
     // on met à jour l'écran
     update_screen(renderer);
+    
 }
 
 

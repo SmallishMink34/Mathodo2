@@ -38,7 +38,8 @@ struct ressources_s{
     SDL_Texture* finishLine; /*!< Texture liée à l'image de la ligne d'arrivée. */
     TTF_Font *font; // Font
     SDL_Color color; // Color
-    /* A COMPLETER */
+    SDL_Texture* framebuffer;
+    uint32_t* pixels;
 };
 
 typedef struct ressources_s ressources_t;
