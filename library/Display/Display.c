@@ -2,7 +2,7 @@
 #include "../../constante.c"
 #include "../utility/utility.h"
 
-void init_ressource(SDL_Renderer *renderer, textures_t *textures){
+void init_ressource(SDL_Renderer *renderer, ressources_t *textures){
     textures->background = load_image( "ressources/space-background.bmp",renderer);
     textures->ship = load_image( "ressources/spaceship.bmp",renderer);
     textures->meteorite = load_image( "ressources/meteorite.bmp",renderer);
@@ -50,7 +50,7 @@ void apply_walls(SDL_Renderer * renderer, SDL_Texture *texture, world_t *world){
 }
 
 
-void refresh_graphics(SDL_Renderer *renderer, world_t *world,textures_t *textures){
+void refresh_graphics(SDL_Renderer *renderer, world_t *world,ressources_t *textures){
     char * str = malloc(sizeof(char)*100);
     //on vide le renderer
     clear_renderer(renderer);
@@ -70,14 +70,13 @@ void refresh_graphics(SDL_Renderer *renderer, world_t *world,textures_t *texture
 }
 
 
-void clean(SDL_Window *window, SDL_Renderer * renderer, textures_t *textures, world_t * world){
+void clean(SDL_Window *window, SDL_Renderer * renderer, ressources_t *textures, world_t * world){
     clean_data(world);
     clean_textures(textures);
     clean_sdl(renderer,window);
-    
 }
 
-void clean_textures(textures_t *textures){
+void clean_textures(ressources_t *textures){
     SDL_DestroyTexture(textures->background);
     SDL_DestroyTexture(textures->ship);
     SDL_DestroyTexture(textures->meteorite);

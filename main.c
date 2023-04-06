@@ -44,10 +44,12 @@ void handle_events(SDL_Event *event,world_t *world){
                 world->vaisseau->x -= MOVING_STEP;
                 break;
             case SDLK_z:
-                world->speed_h = 3;
+                world->speed_h = 4;
+
+                printf("%f\n", world->speed_h);
                 break;
             case SDLK_s:
-                world->speed_h = -3;
+                world->speed_h = INITIAL_SPEED;
                 break;
             case SDLK_ESCAPE:
                 world->gameover = 1;
@@ -56,11 +58,7 @@ void handle_events(SDL_Event *event,world_t *world){
                 break;
              }
             //  print_sprite(world->vaisseau);
-             
-        }else if(event->type == SDL_KEYUP){
-            world->speed_h = 0;
         }
-        
     }
 }
 
@@ -70,9 +68,6 @@ void handle_events(SDL_Event *event,world_t *world){
  * \param textures les textures du jeu
 */
 
-
-
-
 /**
  * \brief fonction qui initialise le jeu: initialisation de la partie graphique (SDL), chargement des textures, initialisation des données
  * \param window la fenêtre du jeu
@@ -81,7 +76,7 @@ void handle_events(SDL_Event *event,world_t *world){
  * \param world le monde
  */
 
-void init(SDL_Window **window, SDL_Renderer ** renderer, textures_t *textures, world_t * world){
+void init(SDL_Window **window, SDL_Renderer ** renderer, ressources_t *textures, world_t * world){
     init_sdl(window,renderer,SCREEN_WIDTH, SCREEN_HEIGHT);
     init_data(world);
     // Initialisation du ttf
@@ -100,7 +95,7 @@ int main( int argc, char* args[] )
 {
     SDL_Event event;
     world_t world;
-    textures_t textures;
+    ressources_t textures;
     SDL_Renderer *renderer;
     SDL_Window *window;
 
@@ -108,16 +103,16 @@ int main( int argc, char* args[] )
     init(&window,&renderer,&textures,&world);
     
     while(!is_game_over(&world)){ //tant que le jeu n'est pas fini
-        
+
         //gestion des évènements
         handle_events(&event,&world);
-        
+
         //mise à jour des données liée à la physique du monde
         update_data(&world);
-        
+
         //rafraichissement de l'écran
         refresh_graphics(renderer,&world,&textures);
-        
+
         // pause de 10 ms pour controler la vitesse de rafraichissement
         pause(10);
     }

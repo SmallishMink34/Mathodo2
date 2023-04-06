@@ -34,12 +34,11 @@
  */
 struct world_s{
     sprite_t *vaisseau ; /*!< Représentation du vaisseau */
-    sprite_t *mur; /*!< Représentation du météorite */
-    sprite_t **murs; 
+    sprite_t **murs; /*<Représentation des météorites>*/
     int nb_murs;
     sprite_t *ligneArriver;
     int gameover; /*!< Champ indiquant si l'on est à la fin du jeu */
-    int speed_h; /*!< Vitesse de déplacement horizontal des éléments du jeu */
+    float speed_h; /*!< Vitesse de déplacement horizontal des éléments du jeu */
     unsigned int startTimer; /*!< Timer de départ */
     unsigned int timer; /*!< Timer de jeu */
 };
@@ -73,7 +72,6 @@ void init_data(world_t * world);
  * \param world les données du monde
  */
 void clean_data(world_t * world);
-
 /**
  * \brief La fonction indique si le sprite est en collision avec un autre sprite
  * 

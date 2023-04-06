@@ -2,7 +2,7 @@
 
 
 void update_data(world_t *world){
-    world->ligneArriver->y += world->speed_h;
+    world->ligneArriver->y += (int)world->speed_h;
     update_walls(world);
     if (isOverScreen(world->vaisseau)){
         if (world->vaisseau->x < 0) world->vaisseau->x = 0;
@@ -15,6 +15,10 @@ void update_data(world_t *world){
             break;
         }
     }
+
+    if (handle_sprite_collide(world->vaisseau, world->ligneArriver, world, 0) == 1){ // si le vaisseau touche la ligne d'arrivée
+        world->gameover = 1;
+    }
     world->timer = SDL_GetTicks();
 }
 
@@ -25,10 +29,9 @@ int is_game_over(world_t *world){
 
 
 void init_data(world_t * world){
-    
     //on n'est pas à la fin du jeu
     world->gameover = 0;
-    world->speed_h = INITIAL_SPEED;
+    world->speed_h = (float)INITIAL_SPEED;
     // Initialisation du vaisseau
     world->vaisseau = init_sprite(world->vaisseau, SCREEN_WIDTH/2 - SHIP_SIZE/2, SCREEN_HEIGHT - SHIP_SIZE, SHIP_SIZE, SHIP_SIZE);
     // world->mur = init_sprite(world->mur, 0, 0, 3*METEORITE_SIZE, 7*METEORITE_SIZE);
@@ -43,18 +46,19 @@ void init_data(world_t * world){
 void clean_data(world_t *world){
     /* utile uniquement si vous avez fait de l'allocation dynamique (malloc); la fonction ici doit permettre de libérer la mémoire (free) */
     free(world->vaisseau);
-    free(world->mur);
     free(world->ligneArriver);
+    free(world->murs);
+
     printf("clean_data");   
 }
 
 
 int handle_sprite_collide(sprite_t *sp1, sprite_t *sp2, world_t *world, int make_disappear){
     if (sprites_collide(sp1, sp2)){
-        world->speed_h = 0;
+        world->gameover = 1;
+        printf("collision");
         return 1;
     }else{
-        world->speed_h = INITIAL_SPEED;
         return 0;
     }
 }
@@ -63,7 +67,6 @@ int handle_sprite_collide(sprite_t *sp1, sprite_t *sp2, world_t *world, int make
 void init_walls(world_t *world){
     world->nb_murs = 6;
     world->murs = malloc(sizeof(sprite_t) * 10);
-    
     world->murs[0] = init_sprite(world->murs[0], 48, 0, 3*METEORITE_SIZE, 6*METEORITE_SIZE);
     world->murs[1] = init_sprite(world->murs[1], 252, 0, 3*METEORITE_SIZE, 6*METEORITE_SIZE);
     world->murs[2] = init_sprite(world->murs[2], 16, -352, 1*METEORITE_SIZE, 5*METEORITE_SIZE);

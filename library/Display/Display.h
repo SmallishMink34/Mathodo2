@@ -31,7 +31,7 @@
  * \param color
  * 
  */
-struct textures_s{
+struct ressources_s{
     SDL_Texture* background; /*!< Texture liée à l'image du fond de l'écran. */
     SDL_Texture* ship; /*!< Texture liée à l'image du vaisseau. */
     SDL_Texture* meteorite; /*!< Texture liée à l'image du météorite. */
@@ -41,7 +41,7 @@ struct textures_s{
     /* A COMPLETER */
 };
 
-typedef struct textures_s textures_t;
+typedef struct ressources_s ressources_t;
 
 /**
  * \brief La fonction initialise les textures du jeu
@@ -49,7 +49,7 @@ typedef struct textures_s textures_t;
  * \param renderer 
  * \param textures 
  */
-void init_ressource(SDL_Renderer *renderer, textures_t *textures);
+void init_ressource(SDL_Renderer *renderer, ressources_t *textures);
 
 /**
  * \brief La fonction applique la texture du fond sur le renderer lié à l'écran de jeu
@@ -84,13 +84,13 @@ void apply_wall(SDL_Renderer * renderer, SDL_Texture *texture, int x, int y);
  * \param world les données du monde
  * \param textures les textures
  */
-void refresh_graphics(SDL_Renderer *renderer, world_t *world,textures_t *textures);
+void refresh_graphics(SDL_Renderer *renderer, world_t *world,ressources_t *textures);
 
 /**
  * \brief La fonction nettoie les textures
  * \param textures les textures
 */
-void clean_textures(textures_t *textures);
+void clean_textures(ressources_t *textures);
 
 /**
 * \brief fonction qui nettoie le jeu: nettoyage de la partie graphique (SDL), nettoyage des textures, nettoyage des données
@@ -99,6 +99,6 @@ void clean_textures(textures_t *textures);
 * \param textures les textures
 * \param world le monde
 */
-void clean(SDL_Window *window, SDL_Renderer * renderer, textures_t *textures, world_t * world);
+void clean(SDL_Window *window, SDL_Renderer * renderer, ressources_t *textures, world_t * world);
 
 #endif
