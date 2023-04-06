@@ -2,30 +2,47 @@
 #include <stdlib.h>
 #include "../Sprites/sprites.h"
 #include "../../constante.c"
+#include <SDL2/SDL.h>
+
 /**
- * \brief Fichier qui contient les données du monde du jeu
+ * \file world.h
+ * \author M Moulias 
+ * \brief Fichier qui contient les fonctions liées au monde du jeu
+ * \version 0.1
+ * \date 2023-04-05
+ * 
+ * @copyright Copyright (c) 2023
  * 
  */
 
 #ifndef WORLD_H
 #define WORLD_H
 
-
 /**
- * \brief Représentation du monde du jeu
-*/
+ * \brief La structure qui contient les données du monde
+ * 
+ * \param vaisseau Vaisseau du joueur
+ * \param mur Météorite
+ * \param murs Tableau de météorites 
+ * \param nb_murs Nombre de météorites 
+ * \param ligneArriver Ligne d'arrivée
+ * \param gameover Champ indiquant si l'on est à la fin du jeu
+ * \param speed_h Vitesse de déplacement horizontal des éléments du jeu
+ * \param startTimer  Timer de départ
+ * \param timer  Timer de jeu
+ * 
+ */
 struct world_s{
     sprite_t *vaisseau ; /*!< Représentation du vaisseau */
     sprite_t *mur; /*!< Représentation du météorite */
+    sprite_t **murs; 
+    int nb_murs;
     sprite_t *ligneArriver;
     int gameover; /*!< Champ indiquant si l'on est à la fin du jeu */
     int speed_h; /*!< Vitesse de déplacement horizontal des éléments du jeu */
-
+    unsigned int startTimer; /*!< Timer de départ */
+    unsigned int timer; /*!< Timer de jeu */
 };
-/**
- * \brief Type qui correspond aux données du monde
- */
-
 typedef struct world_s world_t;
 
 /**
@@ -64,7 +81,22 @@ void clean_data(world_t * world);
  * \param sp2 
  * \param world 
  * \param make_disappear 
+ * 
+ * \return int 0 si les sprites ne se touchent pas, 1 sinon
  */
-void handle_sprite_collide(sprite_t *sp1, sprite_t *sp2, world_t *world, int make_disappear);
+int handle_sprite_collide(sprite_t *sp1, sprite_t *sp2, world_t *world, int make_disappear);
 
+/**
+ * \brief La fonction initialise les murs du jeu
+ * 
+ * \param world 
+ */
+void init_walls(world_t *world);
+
+/**
+ * \brief La fonction met à jour les murs du jeu
+ * 
+ * \param world 
+ */
+void update_walls(world_t *world);
 #endif

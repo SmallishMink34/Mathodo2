@@ -11,13 +11,8 @@
 #include <stdlib.h>
 #include "library/Display/Display.h"
 #include "library/World/world.h"
+#include "library/utility/utility.h"
 
-
-
-/**
- * \brief Fonction qui affiche les données du vaisseau
- * 
- */
 
 /**
  * \brief La fonction gère les évènements ayant eu lieu et qui n'ont pas encore été traités
@@ -60,7 +55,7 @@ void handle_events(SDL_Event *event,world_t *world){
              default:
                 break;
              }
-             print_sprite(world->vaisseau);
+            //  print_sprite(world->vaisseau);
              
         }else if(event->type == SDL_KEYUP){
             world->speed_h = 0;
@@ -89,7 +84,10 @@ void handle_events(SDL_Event *event,world_t *world){
 void init(SDL_Window **window, SDL_Renderer ** renderer, textures_t *textures, world_t * world){
     init_sdl(window,renderer,SCREEN_WIDTH, SCREEN_HEIGHT);
     init_data(world);
-    init_textures(*renderer,textures);
+    // Initialisation du ttf
+    init_ttf();
+    init_ressource(*renderer,textures);
+
 }
 
 

@@ -1,4 +1,16 @@
+/**
+ * \file Display.h
+ * \author M Moulias 
+ * \brief Fichier qui contient les fonctions liée à l'affichage du jeu
+ * \version 0.1
+ * \date 2023-04-05
+ * 
+ * @copyright Copyright (c) 2023
+ * 
+ */
+
 #include "../../sdl2-light.h"
+#include "../../sdl2-ttf-light.h"
 #include "../World/world.h"
 #include "../../constante.c"
 #include <stdio.h>
@@ -6,25 +18,38 @@
 
 #ifndef DISPLAY_H
 #define DISPLAY_H
-/**
- * \brief Représentation pour stocker les textures nécessaires à l'affichage graphique
-*/
 
+
+/**
+ * \brief La structure qui contient les textures du jeu
+ * 
+ * \param background
+ * \param ship
+ * \param meteorite
+ * \param finishLine
+ * \param font
+ * \param color
+ * 
+ */
 struct textures_s{
     SDL_Texture* background; /*!< Texture liée à l'image du fond de l'écran. */
     SDL_Texture* ship; /*!< Texture liée à l'image du vaisseau. */
     SDL_Texture* meteorite; /*!< Texture liée à l'image du météorite. */
     SDL_Texture* finishLine; /*!< Texture liée à l'image de la ligne d'arrivée. */
+    TTF_Font *font; // Font
+    SDL_Color color; // Color
     /* A COMPLETER */
 };
 
-/**
- * \brief Type qui correspond aux textures du jeu
-*/
-
 typedef struct textures_s textures_t;
 
-void init_textures(SDL_Renderer *renderer, textures_t *textures);
+/**
+ * \brief La fonction initialise les textures du jeu
+ * 
+ * \param renderer 
+ * \param textures 
+ */
+void init_ressource(SDL_Renderer *renderer, textures_t *textures);
 
 /**
  * \brief La fonction applique la texture du fond sur le renderer lié à l'écran de jeu
@@ -65,7 +90,6 @@ void refresh_graphics(SDL_Renderer *renderer, world_t *world,textures_t *texture
  * \brief La fonction nettoie les textures
  * \param textures les textures
 */
-
 void clean_textures(textures_t *textures);
 
 /**
@@ -75,7 +99,6 @@ void clean_textures(textures_t *textures);
 * \param textures les textures
 * \param world le monde
 */
-
 void clean(SDL_Window *window, SDL_Renderer * renderer, textures_t *textures, world_t * world);
 
 #endif

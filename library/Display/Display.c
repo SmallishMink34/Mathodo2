@@ -1,11 +1,14 @@
 #include "Display.h"
 #include "../../constante.c"
+#include "../utility/utility.h"
 
-void init_textures(SDL_Renderer *renderer, textures_t *textures){
+void init_ressource(SDL_Renderer *renderer, textures_t *textures){
     textures->background = load_image( "ressources/space-background.bmp",renderer);
     textures->ship = load_image( "ressources/spaceship.bmp",renderer);
     textures->meteorite = load_image( "ressources/meteorite.bmp",renderer);
     textures->finishLine = load_image( "ressources/finish_line.bmp",renderer);
+    textures->font = load_font("ressources/font/arial.ttf", 14);
+    textures->color = (SDL_Color){255, 255, 255, 255};
 }
 
 void apply_background(SDL_Renderer *renderer, SDL_Texture *texture){
@@ -36,26 +39,32 @@ void apply_wall(SDL_Renderer * renderer, SDL_Texture *texture, int x, int y){
     }
 }
 
+void apply_walls(SDL_Renderer * renderer, SDL_Texture *texture, world_t *world){
+    for (int i = 0; i < world->nb_murs; i++){
+        for (int i3 = 0; i3 < world->murs[i]->w/METEORITE_SIZE ; i3++){
+            for (int i2 = 0; i2 < world->murs[i]->h/METEORITE_SIZE ; i2++){
+                apply_wall(renderer, texture, world->murs[i]->x+i3*METEORITE_SIZE, world->murs[i]->y+i2*METEORITE_SIZE);
+            }
+        }
+    }
+}
+
 
 void refresh_graphics(SDL_Renderer *renderer, world_t *world,textures_t *textures){
-
+    char * str = malloc(sizeof(char)*100);
     //on vide le renderer
     clear_renderer(renderer);
     
     //application des textures dans le renderer
     apply_background(renderer, textures->background);
-    /* A COMPLETER */
+
     apply_sprite(renderer, textures->ship, world->vaisseau);
 
     apply_sprite(renderer, textures->finishLine, world->ligneArriver);
 
-    for (int i = 0; i < world->mur->w/METEORITE_SIZE ; i++){
-        for (int i2 = 0; i2 < world->mur->h/METEORITE_SIZE ; i2++){
-            apply_wall(renderer, textures->meteorite, world->mur->x+i*METEORITE_SIZE, world->mur->y+i2*METEORITE_SIZE);
-        }
-    }
+    apply_walls(renderer, textures->meteorite, world);
+    apply_text(renderer, 10, 10, 100, 33, strcats(str, 3, "temps: ",int_to_str((int)world->timer/1000), "s"), textures->font, textures->color); 
     
-
     // on met à jour l'écran
     update_screen(renderer);
 }
@@ -65,6 +74,7 @@ void clean(SDL_Window *window, SDL_Renderer * renderer, textures_t *textures, wo
     clean_data(world);
     clean_textures(textures);
     clean_sdl(renderer,window);
+    
 }
 
 void clean_textures(textures_t *textures){
@@ -72,4 +82,5 @@ void clean_textures(textures_t *textures){
     SDL_DestroyTexture(textures->ship);
     SDL_DestroyTexture(textures->meteorite);
     SDL_DestroyTexture(textures->finishLine);
+    clean_font(textures->font);
 }
