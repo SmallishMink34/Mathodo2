@@ -20,7 +20,7 @@
  * 
  * \param dest 
  * \param num_args 
- * \param ... 
+ * \param ... Nombre d'arguments variables
  * \return char* 
  */
 char * strcats(char* dest, int num_args, ...);

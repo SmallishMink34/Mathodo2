@@ -35,12 +35,14 @@
 struct world_s{
     sprite_t *vaisseau ; /*!< Représentation du vaisseau */
     sprite_t **murs; /*<Représentation des météorites>*/
-    int nb_murs;
+    int nb_murs; // Nombre de météorites
+    int nb_lines_murs; // Nombre de lignes de météorites
     sprite_t *ligneArriver;
     int gameover; /*!< Champ indiquant si l'on est à la fin du jeu */
     float speed_h; /*!< Vitesse de déplacement horizontal des éléments du jeu */
     unsigned int startTimer; /*!< Timer de départ */
     unsigned int timer; /*!< Timer de jeu */
+    char * str; // String affichant le temps sur le jeu
 };
 typedef struct world_s world_t;
 
@@ -97,4 +99,6 @@ void init_walls(world_t *world);
  * \param world 
  */
 void update_walls(world_t *world);
+
+
 #endif

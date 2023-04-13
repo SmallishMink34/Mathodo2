@@ -1,6 +1,7 @@
 #include "Display.h"
 #include "../../constante.c"
 #include "../utility/utility.h"
+#include <math.h>
 
 void init_ressource(SDL_Renderer *renderer, ressources_t *textures){
     textures->background = load_image( "ressources/space-background.bmp",renderer);
@@ -9,41 +10,49 @@ void init_ressource(SDL_Renderer *renderer, ressources_t *textures){
     textures->finishLine = load_image( "ressources/finish_line.bmp",renderer);
     textures->font = load_font("ressources/font/arial.ttf", 14);
     textures->color = (SDL_Color){255, 255, 255, 255};
+    textures->center = (SDL_Point){SCREEN_WIDTH/2, SCREEN_HEIGHT/2};
+    textures->angle = 0;
 }
 
-void apply_background(SDL_Renderer *renderer, SDL_Texture *texture){
+void apply_background(SDL_Renderer *renderer, SDL_Texture *texture, ressources_t *res){
     if(texture != NULL){
-      apply_texture(texture, renderer, 0, 0);
+        //printf("%f %f\n", (SCREEN_WIDTH/2+(0-SCREEN_WIDTH/2)*cos(angle)-(0-SCREEN_HEIGHT/2)*sin(angle)), (SCREEN_HEIGHT/2+(0-SCREEN_WIDTH/2)*sin(angle)+(0-SCREEN_HEIGHT/2)*cos(angle)));
+      apply_texture(texture, renderer, 0, 0, res->angle*180/M_PI, &res->center);
     }
 }
 
-void apply_sprite(SDL_Renderer * renderer, SDL_Texture *texture, sprite_t *sprite){
+void apply_sprite(SDL_Renderer * renderer, SDL_Texture *texture, sprite_t *sprite, ressources_t *res){
     if(texture != NULL){
         SDL_Rect rect;
-        rect.x = sprite->x;
-        rect.y = sprite->y;
+        rect.x = SCREEN_WIDTH/2 + (sprite->x - SCREEN_WIDTH/2) * cos(res->angle) - (sprite->y - SCREEN_HEIGHT/2) * sin(res->angle);
+        rect.y = SCREEN_HEIGHT/2 + (sprite->x - SCREEN_WIDTH/2) * sin(res->angle) + (sprite->y - SCREEN_HEIGHT/2) * cos(res->angle);
+
         rect.w = sprite->w;
         rect.h = sprite->h;
-        SDL_RenderCopy(renderer, texture, NULL, &rect);
+
+        SDL_RenderCopyEx(renderer, texture, NULL, &rect, res->angle*180/M_PI, NULL, SDL_FLIP_NONE);
     }
 }
 
-void apply_wall(SDL_Renderer * renderer, SDL_Texture *texture, int x, int y){
+void apply_wall(SDL_Renderer * renderer, SDL_Texture *texture, int x, int y, ressources_t *res){
     if(texture != NULL){
         SDL_Rect rect;
-        rect.x = x;
-        rect.y = y;
+        rect.x = SCREEN_WIDTH/2 + (x - SCREEN_WIDTH/2) * cos(res->angle) - (y - SCREEN_HEIGHT/2) * sin(res->angle);
+        rect.y = SCREEN_HEIGHT/2 + (x - SCREEN_WIDTH/2) * sin(res->angle) + (y - SCREEN_HEIGHT/2) * cos(res->angle);
         rect.w = METEORITE_SIZE;
         rect.h = METEORITE_SIZE;
-        SDL_RenderCopy(renderer, texture, NULL, &rect);
+        
+        if (SDL_RenderCopyEx(renderer, texture, NULL, &rect, res->angle*180/M_PI, NULL, SDL_FLIP_NONE) != 0){
+            printf("ok\n");
+        }
     }
 }
 
-void apply_walls(SDL_Renderer * renderer, SDL_Texture *texture, world_t *world){
+void apply_walls(SDL_Renderer * renderer, SDL_Texture *texture, world_t *world, ressources_t *res){
     for (int i = 0; i < world->nb_murs; i++){
         for (int i3 = 0; i3 < world->murs[i]->w/METEORITE_SIZE ; i3++){
             for (int i2 = 0; i2 < world->murs[i]->h/METEORITE_SIZE ; i2++){
-                apply_wall(renderer, texture, world->murs[i]->x+i3*METEORITE_SIZE, world->murs[i]->y+i2*METEORITE_SIZE);
+                apply_wall(renderer, texture, world->murs[i]->x+i3*METEORITE_SIZE, world->murs[i]->y+i2*METEORITE_SIZE, res);
             }
         }
     }
@@ -51,25 +60,36 @@ void apply_walls(SDL_Renderer * renderer, SDL_Texture *texture, world_t *world){
 
 
 void refresh_graphics(SDL_Renderer *renderer, world_t *world,ressources_t *textures){
-    char * str = malloc(sizeof(char)*100);
     //on vide le renderer
     clear_renderer(renderer);
     
     //application des textures dans le renderer
-    apply_background(renderer, textures->background);
+    apply_background(renderer, textures->background, textures);
 
-    apply_sprite(renderer, textures->ship, world->vaisseau);
+    apply_sprite(renderer, textures->ship, world->vaisseau, textures);
 
-    apply_sprite(renderer, textures->finishLine, world->ligneArriver);
+    apply_sprite(renderer, textures->finishLine, world->ligneArriver, textures);
 
-    apply_walls(renderer, textures->meteorite, world);
-    apply_text(renderer, 10, 10, 100, 33, strcats(str, 3, "temps: ",int_to_str((int)world->timer/1000), "s"), textures->font, textures->color); 
+    apply_walls(renderer, textures->meteorite, world, textures);
+
+    if (timer_update_s(world) != 0){
+        world->str[0] = '\0';
+        world->str = strcats(world->str, 3, "temps: ",int_to_str((int)world->timer/1000), "s");
+    }
+
+    apply_text(renderer, 10, 10, 100, 33, world->str, textures->font, textures->color); 
     
-    // on met à jour l'écran
+   
     update_screen(renderer);
     
 }
 
+int timer_update_s(world_t *world){
+    if (world->timer%1000 <=  110|| world->timer%1000 >= 985){
+        return world->timer%1000;
+    }
+    return 0;
+}
 
 void clean(SDL_Window *window, SDL_Renderer * renderer, ressources_t *textures, world_t * world){
     clean_data(world);

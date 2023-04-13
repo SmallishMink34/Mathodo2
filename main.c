@@ -53,10 +53,10 @@ void handle_events(SDL_Event *event,world_t *world){
                 break;
             case SDLK_ESCAPE:
                 world->gameover = 1;
-                break; 
-             default:
                 break;
-             }
+            default:
+                break;
+            }
             //  print_sprite(world->vaisseau);
         }
     }

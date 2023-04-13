@@ -38,8 +38,8 @@ struct ressources_s{
     SDL_Texture* finishLine; /*!< Texture liée à l'image de la ligne d'arrivée. */
     TTF_Font *font; // Font
     SDL_Color color; // Color
-    SDL_Texture* framebuffer;
-    uint32_t* pixels;
+    SDL_Point center; /*!< Point central de la fenetre. */
+    long double angle; /*!< Angle de rotation de l'image. */
 };
 
 typedef struct ressources_s ressources_t;
@@ -57,7 +57,7 @@ void init_ressource(SDL_Renderer *renderer, ressources_t *textures);
  * \param renderer le renderer
  * \param texture la texture liée au fond
 */
-void apply_background(SDL_Renderer *renderer, SDL_Texture *texture);
+void apply_background(SDL_Renderer *renderer, SDL_Texture *texture, ressources_t *res);
 
 /**
  * \brief La fonction qui applique la texture \a texture sur le renderer \a renderer en fonction des données du sprite \a sprite
@@ -66,7 +66,7 @@ void apply_background(SDL_Renderer *renderer, SDL_Texture *texture);
  * \param renderer 
  * \param sprite 
  */
-void apply_sprite(SDL_Renderer * renderer, SDL_Texture *texture, sprite_t *sprite);
+void apply_sprite(SDL_Renderer * renderer, SDL_Texture *texture, sprite_t *sprite, ressources_t *res);
 
 /**
  * \brief La fonction qui applique la texture \a texture sur le renderer \a renderer en fonction des coordonnées \a x et \a y
@@ -76,8 +76,17 @@ void apply_sprite(SDL_Renderer * renderer, SDL_Texture *texture, sprite_t *sprit
  * \param x 
  * \param y 
  */
-void apply_wall(SDL_Renderer * renderer, SDL_Texture *texture, int x, int y);
+void apply_wall(SDL_Renderer * renderer, SDL_Texture *texture, int x, int y, ressources_t *res);
 
+/**
+ * \brief La fonction qui applique les textures des murs sur le renderer \a renderer en fonction des données du monde \a world
+ * 
+ * \param renderer 
+ * \param texture 
+ * \param world 
+ * \param res 
+ */
+void apply_walls(SDL_Renderer * renderer, SDL_Texture *texture, world_t *world, ressources_t *res);
 
 /**
  * \brief La fonction rafraichit l'écran en fonction de l'état des données du monde
@@ -102,4 +111,11 @@ void clean_textures(ressources_t *textures);
 */
 void clean(SDL_Window *window, SDL_Renderer * renderer, ressources_t *textures, world_t * world);
 
+/**
+ * \brief La fonction qui affiche le temps restant sur l'écran
+ * 
+ * \param world 
+ * \return int 
+ */
+int timer_update_s(world_t *world);
 #endif

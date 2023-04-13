@@ -61,7 +61,7 @@ void clean_texture(SDL_Texture *texture);
  *  \param y l'ordonnée sur le renderer de l'endroit où est appliquée texture (point en haut à gauche de la surface)
 */
 
-void apply_texture(SDL_Texture *texture,SDL_Renderer *renderer,int x, int y);
+void apply_texture(SDL_Texture *texture,SDL_Renderer *renderer,int x, int y, int angle, SDL_Point *center);
 
 
 

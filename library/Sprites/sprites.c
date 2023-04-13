@@ -12,7 +12,7 @@ void print_sprite(sprite_t *sprite){
 }
 
 
-sprite_t *init_sprite(sprite_t *sprite, int x, int y, int w, int h){
+sprite_t *init_sprite(sprite_t *sprite, int x, int y, int w, int h, int id){
     sprite = malloc(sizeof(sprite_t));
     sprite->x = x;
     sprite->y = y;

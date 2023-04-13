@@ -7,7 +7,8 @@
         "sprites.h": "c",
         "sdl2-ttf-light.h": "c",
         "stdlib.h": "c",
-        "utility.h": "c"
+        "utility.h": "c",
+        "cmath": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

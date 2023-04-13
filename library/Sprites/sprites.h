@@ -28,6 +28,7 @@ struct sprite_s{
     int y;
     int w;
     int h;
+    int id;
 };
 
 typedef struct sprite_s sprite_t;
@@ -40,6 +41,11 @@ typedef struct sprite_s sprite_t;
  */
 int isOverScreen(sprite_t *sprite);
 
+/**
+ * \brief La fonction affiche le sprite
+ * 
+ * \param sprite 
+ */
 void print_sprite(sprite_t *sprite);
 
 /**
@@ -52,7 +58,7 @@ void print_sprite(sprite_t *sprite);
  * \param h 
  * \return sprite_t* 
  */
-sprite_t *init_sprite(sprite_t *sprite, int x, int y, int w, int h);
+sprite_t *init_sprite(sprite_t *sprite, int x, int y, int w, int h, int id);
 
 /**
  * \brief La fonction libère les données du sprite
