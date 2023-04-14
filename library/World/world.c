@@ -14,6 +14,9 @@ void update_data(world_t *world){
         collide(world->vaisseau, world->murs[i], world, 0);
     }
     collide(world->vaisseau, world->ligneArriver, world, 1);
+
+    allEvents(world);
+
     world->timer = SDL_GetTicks();
 }
 
@@ -36,6 +39,8 @@ void init_data(world_t * world){
     world->startTimer = SDL_GetTicks();
     world->timer = SDL_GetTicks();
     world->str = malloc(sizeof(char)*100);
+    world->angle = 0.0;
+    world->isFlipping = 0;
 }
 
 
@@ -45,7 +50,6 @@ void clean_data(world_t *world){
     free(world->ligneArriver);
     free(world->murs);
     free(world->str);
-    
     printf("clean_data");   
 }
 
@@ -55,10 +59,33 @@ void collide(sprite_t *sp1, sprite_t *sp2, world_t *world, int make_disappear){
         if (strcmp(sp2->id, "1") == 0){
             world->gameover = 1;
         }else if(strcmp(sp2->id, "2") == 0){
-            printf("Changement de sens");
+            if (world->isFlipping == 0){
+                world->isFlipping = 1;
+            }else if(world->isFlipping == -2){
+                world->isFlipping = -1;
+            }
         }else if(strcmp(sp2->id, "z") == 0){
             world->gameover = 1;
         }
+    }
+}
+
+void flipScreen(world_t *world){
+    if (world->timer - world->startTimer > 10){
+        if (world->isFlipping == 1){
+            world->angle += M_PI/20;
+            if (world->angle > M_PI){
+                world->angle = M_PI;
+                world->isFlipping = -2;
+            }
+        }else if(world->isFlipping == -1){
+            world->angle -= M_PI/20;
+            if (world->angle < 0){
+                world->angle = 0;
+                world->isFlipping = 0;
+            }
+        }
+        world->startTimer = SDL_GetTicks();
     }
 }
 
@@ -76,11 +103,16 @@ void init_walls(world_t *world){
             }
         }
     }
-    printf("aaaa");
 }
 
 void update_walls(world_t *world){
     for (int i = 0; i < world->nb_murs; i++){
         world->murs[i]->y += world->speed_h;
+    }
+}
+
+void allEvents(world_t *world){
+    if (world->isFlipping != 0){
+        flipScreen(world);
     }
 }

@@ -3,6 +3,7 @@
 #include "../Sprites/sprites.h"
 #include "../../constante.c"
 #include <SDL2/SDL.h>
+#include <stdbool.h>
 
 /**
  * \file world.h
@@ -43,6 +44,9 @@ struct world_s{
     unsigned int startTimer; /*!< Timer de départ */
     unsigned int timer; /*!< Timer de jeu */
     char * str; // String affichant le temps sur le jeu
+    double angle; // Angle de rotation de la map
+    int isFlipping; // Indique si l'on est en train de faire une rotation de l'écran et dans quelle sens (0 : non droite, 1 : vers la droite, -1 : vers la gauche, -2 : non gauche)
+    
 };
 typedef struct world_s world_t;
 
@@ -60,7 +64,6 @@ void update_data(world_t *world);
 int is_game_over(world_t *world);
 
 
-
 /**
  * \brief La fonction initialise les données du monde du jeu
  * \param world les données du monde
@@ -75,6 +78,12 @@ void init_data(world_t * world);
  */
 void clean_data(world_t * world);
 
+/**
+ * \brief La fonction qui retounre le monde
+ * 
+ * \param world 
+ */
+void flipScreen(world_t *world);
 
 /**
  * \brief La fonction fais une action en fonction de la collision entre deux sprites
@@ -101,5 +110,10 @@ void init_walls(world_t *world);
  */
 void update_walls(world_t *world);
 
-
+/**
+ * \brief La fonction qui execute toutes les actions du jeu
+ * 
+ * \param world 
+ */
+void allEvents(world_t *world);
 #endif

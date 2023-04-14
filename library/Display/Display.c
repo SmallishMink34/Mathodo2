@@ -11,48 +11,47 @@ void init_ressource(SDL_Renderer *renderer, ressources_t *textures){
     textures->font = load_font("ressources/font/arial.ttf", 14);
     textures->color = (SDL_Color){255, 255, 255, 255};
     textures->center = (SDL_Point){SCREEN_WIDTH/2, SCREEN_HEIGHT/2};
-    textures->angle = 0;
 }
 
-void apply_background(SDL_Renderer *renderer, SDL_Texture *texture, ressources_t *res){
+void apply_background(SDL_Renderer *renderer, SDL_Texture *texture, world_t *world){
     if(texture != NULL){
         //printf("%f %f\n", (SCREEN_WIDTH/2+(0-SCREEN_WIDTH/2)*cos(angle)-(0-SCREEN_HEIGHT/2)*sin(angle)), (SCREEN_HEIGHT/2+(0-SCREEN_WIDTH/2)*sin(angle)+(0-SCREEN_HEIGHT/2)*cos(angle)));
-      apply_texture(texture, renderer, 0, 0, res->angle*180/M_PI, &res->center);
+      apply_texture(texture, renderer, 0, 0, world->angle*180/M_PI);
     }
 }
 
-void apply_sprite(SDL_Renderer * renderer, SDL_Texture *texture, sprite_t *sprite, ressources_t *res){
+void apply_sprite(SDL_Renderer * renderer, SDL_Texture *texture, sprite_t *sprite, world_t *world){
     if(texture != NULL){
         SDL_Rect rect;
-        rect.x = SCREEN_WIDTH/2 + (sprite->x - SCREEN_WIDTH/2) * cos(res->angle) - (sprite->y - SCREEN_HEIGHT/2) * sin(res->angle);
-        rect.y = SCREEN_HEIGHT/2 + (sprite->x - SCREEN_WIDTH/2) * sin(res->angle) + (sprite->y - SCREEN_HEIGHT/2) * cos(res->angle);
+        rect.x = SCREEN_WIDTH/2 + (sprite->x - SCREEN_WIDTH/2) * cos(world->angle) - (sprite->y - SCREEN_HEIGHT/2) * sin(world->angle);
+        rect.y = SCREEN_HEIGHT/2 + (sprite->x - SCREEN_WIDTH/2) * sin(world->angle) + (sprite->y - SCREEN_HEIGHT/2) * cos(world->angle);
 
         rect.w = sprite->w;
         rect.h = sprite->h;
 
-        SDL_RenderCopyEx(renderer, texture, NULL, &rect, res->angle*180/M_PI, NULL, SDL_FLIP_NONE);
+        SDL_RenderCopyEx(renderer, texture, NULL, &rect, world->angle*180/M_PI, NULL, SDL_FLIP_NONE);
     }
 }
 
-void apply_wall(SDL_Renderer * renderer, SDL_Texture *texture, int x, int y, ressources_t *res){
+void apply_wall(SDL_Renderer * renderer, SDL_Texture *texture, int x, int y,world_t *world){
     if(texture != NULL){
         SDL_Rect rect;
-        rect.x = SCREEN_WIDTH/2 + (x - SCREEN_WIDTH/2) * cos(res->angle) - (y - SCREEN_HEIGHT/2) * sin(res->angle);
-        rect.y = SCREEN_HEIGHT/2 + (x - SCREEN_WIDTH/2) * sin(res->angle) + (y - SCREEN_HEIGHT/2) * cos(res->angle);
+        rect.x = SCREEN_WIDTH/2 + (x - SCREEN_WIDTH/2) * cos(world->angle) - (y - SCREEN_HEIGHT/2) * sin(world->angle);
+        rect.y = SCREEN_HEIGHT/2 + (x - SCREEN_WIDTH/2) * sin(world->angle) + (y - SCREEN_HEIGHT/2) * cos(world->angle);
         rect.w = METEORITE_SIZE;
         rect.h = METEORITE_SIZE;
         
-        if (SDL_RenderCopyEx(renderer, texture, NULL, &rect, res->angle*180/M_PI, NULL, SDL_FLIP_NONE) != 0){
+        if (SDL_RenderCopyEx(renderer, texture, NULL, &rect, world->angle*180/M_PI, NULL, SDL_FLIP_NONE) != 0){
             printf("ok\n");
         }
     }
 }
 
-void apply_walls(SDL_Renderer * renderer, SDL_Texture *texture, world_t *world, ressources_t *res){
+void apply_walls(SDL_Renderer * renderer, SDL_Texture *texture, world_t *world){
     for (int i = 0; i < world->nb_murs; i++){
         for (int i3 = 0; i3 < world->murs[i]->w/METEORITE_SIZE ; i3++){
             for (int i2 = 0; i2 < world->murs[i]->h/METEORITE_SIZE ; i2++){
-                apply_wall(renderer, texture, world->murs[i]->x+i3*METEORITE_SIZE, world->murs[i]->y+i2*METEORITE_SIZE, res);
+                apply_wall(renderer, texture, world->murs[i]->x+i3*METEORITE_SIZE, world->murs[i]->y+i2*METEORITE_SIZE, world);
             }
         }
     }
@@ -64,13 +63,13 @@ void refresh_graphics(SDL_Renderer *renderer, world_t *world,ressources_t *textu
     clear_renderer(renderer);
     
     //application des textures dans le renderer
-    apply_background(renderer, textures->background, textures);
+    apply_background(renderer, textures->background, world);
 
-    apply_sprite(renderer, textures->ship, world->vaisseau, textures);
+    apply_sprite(renderer, textures->ship, world->vaisseau, world);
 
-    apply_sprite(renderer, textures->finishLine, world->ligneArriver, textures);
+    apply_sprite(renderer, textures->finishLine, world->ligneArriver, world);
 
-    apply_walls(renderer, textures->meteorite, world, textures);
+    apply_walls(renderer, textures->meteorite, world);
 
     if (timer_update_s(world) != 0){
         world->str[0] = '\0';

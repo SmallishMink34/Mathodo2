@@ -52,13 +52,13 @@ SDL_Texture *load_image(const char path[], SDL_Renderer *renderer)
 }
 
 
-void apply_texture(SDL_Texture *texture,SDL_Renderer *renderer,int x, int y, int angle, SDL_Point *center){
+void apply_texture(SDL_Texture *texture,SDL_Renderer *renderer,int x, int y, int angle){
     SDL_Rect dst = {0, 0, 0, 0};
     
     SDL_QueryTexture(texture, NULL, NULL, &dst.w, &dst.h);
     dst.x = x; dst.y=y;
     
-    SDL_RenderCopyEx(renderer, texture, NULL, &dst, angle, center, SDL_FLIP_NONE);
+    SDL_RenderCopyEx(renderer, texture, NULL, &dst, angle, NULL, SDL_FLIP_NONE);
 
     
 }
