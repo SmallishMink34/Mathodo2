@@ -28,7 +28,7 @@ struct sprite_s{
     int y;
     int w;
     int h;
-    int id;
+    char * id;
 };
 
 typedef struct sprite_s sprite_t;
@@ -58,10 +58,10 @@ void print_sprite(sprite_t *sprite);
  * \param h 
  * \return sprite_t* 
  */
-sprite_t *init_sprite(sprite_t *sprite, int x, int y, int w, int h, int id);
+sprite_t *init_sprite(sprite_t *sprite, int x, int y, int w, int h, char id);
 
 /**
- * \brief La fonction libère les données du sprite
+ * \brief La fonction indique si les sprites se touchent
  * 
  * \param sp1 
  * \param sp2 

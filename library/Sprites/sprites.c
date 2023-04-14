@@ -1,5 +1,6 @@
 #include "sprites.h"
 #include "../../constante.c"
+#include <string.h>
 int isOverScreen(sprite_t *sprite){
     if(sprite->x < 0 || sprite->x + sprite->w > SCREEN_WIDTH || sprite->y < 0 || sprite->y + sprite->h > SCREEN_HEIGHT){
         return 1;
@@ -12,12 +13,15 @@ void print_sprite(sprite_t *sprite){
 }
 
 
-sprite_t *init_sprite(sprite_t *sprite, int x, int y, int w, int h, int id){
+sprite_t *init_sprite(sprite_t *sprite, int x, int y, int w, int h, char id){
     sprite = malloc(sizeof(sprite_t));
     sprite->x = x;
     sprite->y = y;
     sprite->w = w;
     sprite->h = h;
+    sprite->id = malloc(sizeof(char) * 10);
+    strcpy(sprite->id, &id);
+
     return sprite;
 }
 

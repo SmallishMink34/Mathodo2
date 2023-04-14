@@ -59,7 +59,7 @@ void update_data(world_t *world);
 
 int is_game_over(world_t *world);
 
-/**
+
 
 /**
  * \brief La fonction initialise les données du monde du jeu
@@ -74,17 +74,18 @@ void init_data(world_t * world);
  * \param world les données du monde
  */
 void clean_data(world_t * world);
+
+
 /**
- * \brief La fonction indique si le sprite est en collision avec un autre sprite
+ * \brief La fonction fais une action en fonction de la collision entre deux sprites
  * 
- * \param sp1 
- * \param sp2 
- * \param world 
- * \param make_disappear 
- * 
- * \return int 0 si les sprites ne se touchent pas, 1 sinon
+ * \param sp1 Généralement le vaisseau
+ * \param sp2 Généralement la météorite
+ * \param world Le monde
+ * \param make_disappear Indique si l'on doit faire disparaître les sprites en cas de collision 
  */
-int handle_sprite_collide(sprite_t *sp1, sprite_t *sp2, world_t *world, int make_disappear);
+void collide(sprite_t *sp1, sprite_t *sp2, world_t *world, int make_disappear);
+
 
 /**
  * \brief La fonction initialise les murs du jeu
