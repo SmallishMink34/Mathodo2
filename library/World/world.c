@@ -17,7 +17,7 @@ void update_data(world_t *world){
 
     allEvents(world);
 
-    world->timer = SDL_GetTicks();
+    world->timer = SDL_GetTicks(); 
 }
 
 
@@ -71,7 +71,7 @@ void collide(sprite_t *sp1, sprite_t *sp2, world_t *world, int make_disappear){
 }
 
 void flipScreen(world_t *world){
-    if (world->timer - world->startTimer > 10){
+    if (world->timer - world->startTimer > 1){
         if (world->isFlipping == 1){
             world->angle += M_PI/20;
             if (world->angle > M_PI){
@@ -98,11 +98,11 @@ void init_walls(world_t *world){
     for (int i = 0; i < world->nb_lines_murs; i++) {
         for (int j = 0; j < MAX_LENGTH; j++) {
             if (txt[i][j] != '0'){
-                world->murs[world->nb_murs] = init_sprite(world->murs[world->nb_murs], j*METEORITE_SIZE, (i*METEORITE_SIZE)-(METEORITE_SIZE*world->nb_lines_murs), METEORITE_SIZE, METEORITE_SIZE, txt[i][j]);
+                world->murs[world->nb_murs] = init_sprite(world->murs[world->nb_murs], j*METEORITE_SIZE+2, (i*METEORITE_SIZE)-(METEORITE_SIZE*world->nb_lines_murs), METEORITE_SIZE, METEORITE_SIZE, txt[i][j]);
                 world->nb_murs++;
             }
         }
-    }
+    }   
 }
 
 void update_walls(world_t *world){

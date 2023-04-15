@@ -4,13 +4,19 @@
 #include <math.h>
 
 void init_ressource(SDL_Renderer *renderer, ressources_t *textures){
-    textures->background = load_image( "ressources/space-background.bmp",renderer);
+    textures->background = load_image( "ressources/Elements/background2.bmp",renderer);
     textures->ship = load_image( "ressources/spaceship.bmp",renderer);
-    textures->meteorite = load_image( "ressources/meteorite.bmp",renderer);
+    
     textures->finishLine = load_image( "ressources/finish_line.bmp",renderer);
     textures->font = load_font("ressources/font/arial.ttf", 14);
     textures->color = (SDL_Color){255, 255, 255, 255};
-    textures->center = (SDL_Point){SCREEN_WIDTH/2, SCREEN_HEIGHT/2};
+
+    init_ressource_element(renderer, textures);
+}
+
+void init_ressource_element(SDL_Renderer *renderer, ressources_t *textures){
+    textures->meteorite = load_image( "ressources/meteorite.bmp",renderer);
+    textures->e_rotate = load_image("ressources/Elements/reverse.bmp", renderer);
 }
 
 void apply_background(SDL_Renderer *renderer, SDL_Texture *texture, world_t *world){
@@ -47,11 +53,15 @@ void apply_wall(SDL_Renderer * renderer, SDL_Texture *texture, int x, int y,worl
     }
 }
 
-void apply_walls(SDL_Renderer * renderer, SDL_Texture *texture, world_t *world){
+void apply_walls(SDL_Renderer * renderer, SDL_Texture *texture, world_t *world, ressources_t *res){
     for (int i = 0; i < world->nb_murs; i++){
         for (int i3 = 0; i3 < world->murs[i]->w/METEORITE_SIZE ; i3++){
             for (int i2 = 0; i2 < world->murs[i]->h/METEORITE_SIZE ; i2++){
-                apply_wall(renderer, texture, world->murs[i]->x+i3*METEORITE_SIZE, world->murs[i]->y+i2*METEORITE_SIZE, world);
+                if (strcmp(world->murs[i]->id, "1") == 0){
+                    apply_wall(renderer, res->meteorite, world->murs[i]->x+i3*METEORITE_SIZE, world->murs[i]->y+i2*METEORITE_SIZE, world);
+                }else if(strcmp(world->murs[i]->id, "2") == 0){
+                    apply_wall(renderer, res->e_rotate, world->murs[i]->x+i3*METEORITE_SIZE, world->murs[i]->y+i2*METEORITE_SIZE, world);
+                }
             }
         }
     }
@@ -69,7 +79,7 @@ void refresh_graphics(SDL_Renderer *renderer, world_t *world,ressources_t *textu
 
     apply_sprite(renderer, textures->finishLine, world->ligneArriver, world);
 
-    apply_walls(renderer, textures->meteorite, world);
+    apply_walls(renderer, textures->meteorite, world, textures);
 
     if (timer_update_s(world) != 0){
         world->str[0] = '\0';

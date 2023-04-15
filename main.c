@@ -12,6 +12,7 @@
 #include "library/Display/Display.h"
 #include "library/World/world.h"
 #include "library/utility/utility.h"
+#include "constante.c"
 
 
 /**
@@ -21,7 +22,15 @@
  */
 
 void handle_events(SDL_Event *event,world_t *world){
-    Uint8 *keystates;
+    const Uint8 *keystates = SDL_GetKeyboardState(NULL);
+
+    if (keystates[SDL_SCANCODE_A]){
+        world->vaisseau->x -= MOVING_STEP; 
+    }
+    if(keystates[SDL_SCANCODE_D]){
+        world->vaisseau->x += MOVING_STEP;
+    }
+
     while( SDL_PollEvent( event ) ) {
         
         //Si l'utilisateur a cliqué sur le X de la fenêtre
@@ -33,29 +42,21 @@ void handle_events(SDL_Event *event,world_t *world){
          //si une touche est appuyée
          if(event->type == SDL_KEYDOWN){
              //si la touche appuyée est 'D'
+            
+            switch (event->key.keysym.sym){
+                case SDLK_z:
+                    world->speed_h = 4;
 
-             switch (event->key.keysym.sym)
-             {
-             case SDLK_d:
-             
-                world->vaisseau->x += MOVING_STEP;
-                break;
-            case SDLK_q:
-                world->vaisseau->x -= MOVING_STEP;
-                break;
-            case SDLK_z:
-                world->speed_h = 4;
-
-                printf("%f\n", world->speed_h);
-                break;
-            case SDLK_s:
-                world->speed_h = INITIAL_SPEED;
-                break;
-            case SDLK_ESCAPE:
-                world->gameover = 1;
-                break;
-            default:
-                break;
+                    printf("%f\n", world->speed_h);
+                    break;
+                case SDLK_s:
+                    world->speed_h = INITIAL_SPEED;
+                    break;
+                case SDLK_ESCAPE:
+                    world->gameover = 1;
+                    break;
+                default:
+                    break;
             }
             //  print_sprite(world->vaisseau);
         }
@@ -99,11 +100,13 @@ int main( int argc, char* args[] )
     SDL_Renderer *renderer;
     SDL_Window *window;
 
+    Uint32 ticks = SDL_GetTicks();
+    Uint32 frameTime = 0;
+
     //initialisation du jeu
     init(&window,&renderer,&textures,&world);
-    
     while(!is_game_over(&world)){ //tant que le jeu n'est pas fini
-
+        frameTime = SDL_GetTicks() - ticks;
         //gestion des évènements
         handle_events(&event,&world);
 
@@ -113,8 +116,11 @@ int main( int argc, char* args[] )
         //rafraichissement de l'écran
         refresh_graphics(renderer,&world,&textures);
 
-        // pause de 10 ms pour controler la vitesse de rafraichissement
-        pause(10);
+        if (frameTime < 16) {
+            SDL_Delay(16 - frameTime); // 16 ms = 60 fps
+        }
+
+        ticks = SDL_GetTicks();
     }
     
     //nettoyage final

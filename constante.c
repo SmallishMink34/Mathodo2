@@ -1,12 +1,12 @@
 /**
  * \brief Largeur de l'écran de jeu
  */
-#define SCREEN_WIDTH 300
+#define SCREEN_WIDTH 768
 
 /**
  * \brief Hauteur de l'écran de jeu
  */
-#define SCREEN_HEIGHT 480
+#define SCREEN_HEIGHT 600
 
 
 /**
@@ -35,7 +35,7 @@
  * \brief Pas de déplacement horizontal du vaisseau
 */
 
-#define MOVING_STEP 10
+#define MOVING_STEP 5
 
 
 /**

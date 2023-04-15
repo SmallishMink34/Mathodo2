@@ -35,10 +35,10 @@ struct ressources_s{
     SDL_Texture* background; /*!< Texture liée à l'image du fond de l'écran. */
     SDL_Texture* ship; /*!< Texture liée à l'image du vaisseau. */
     SDL_Texture* meteorite; /*!< Texture liée à l'image du météorite. */
+    SDL_Texture* e_rotate; /*!< Texture liée à l'image de l'élément de rotation. */
     SDL_Texture* finishLine; /*!< Texture liée à l'image de la ligne d'arrivée. */
     TTF_Font *font; // Font
     SDL_Color color; // Color
-    SDL_Point center; /*!< Point central de la fenetre. */
     long double angle; /*!< Angle de rotation de l'image. */
 };
 
@@ -51,6 +51,14 @@ typedef struct ressources_s ressources_t;
  * \param textures 
  */
 void init_ressource(SDL_Renderer *renderer, ressources_t *textures);
+
+/**
+ * \brief La fonction initialise les textures des elements du jeu
+ *  
+ * \param renderer 
+ * \param textures 
+ */
+void init_ressource_element(SDL_Renderer *renderer, ressources_t *textures);
 
 /**
  * \brief La fonction applique la texture du fond sur le renderer lié à l'écran de jeu
@@ -86,7 +94,7 @@ void apply_wall(SDL_Renderer * renderer, SDL_Texture *texture, int x, int y, wor
  * \param world 
  * \param res 
  */
-void apply_walls(SDL_Renderer * renderer, SDL_Texture *texture, world_t *world);
+void apply_walls(SDL_Renderer * renderer, SDL_Texture *texture, world_t *world, ressources_t *res);
 
 /**
  * \brief La fonction rafraichit l'écran en fonction de l'état des données du monde
