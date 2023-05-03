@@ -2,22 +2,24 @@
 #include "../utility/utility.h"
 
 void update_data(world_t *world){
-    world->ligneArriver->y += (int)world->speed_h;
-    update_walls(world);
-    if (isOverScreen(world->vaisseau)){
-        if (world->vaisseau->x < 0) world->vaisseau->x = 0;
-        if (world->vaisseau->x + world->vaisseau->w > SCREEN_WIDTH) world->vaisseau->x = SCREEN_WIDTH - world->vaisseau->w;
-        if (world->vaisseau->y < 0) world->vaisseau->y = 0;
-        if (world->vaisseau->y + world->vaisseau->h > SCREEN_HEIGHT) world->vaisseau->y = SCREEN_HEIGHT - world->vaisseau->h;
-    }
-    for(int i = 0; i < world->nb_murs; i++){
-        collide(world->vaisseau, world->murs[i], world, 0);
-    }
-    collide(world->vaisseau, world->ligneArriver, world, 1);
+    if (!world->isMenu){
+        world->ligneArriver->y += (int)world->speed_h;
+        update_walls(world);
+        if (isOverScreen(world->vaisseau)){
+            if (world->vaisseau->x < 0) world->vaisseau->x = 0;
+            if (world->vaisseau->x + world->vaisseau->w > SCREEN_WIDTH) world->vaisseau->x = SCREEN_WIDTH - world->vaisseau->w;
+            if (world->vaisseau->y < 0) world->vaisseau->y = 0;
+            if (world->vaisseau->y + world->vaisseau->h > SCREEN_HEIGHT) world->vaisseau->y = SCREEN_HEIGHT - world->vaisseau->h;
+        }
+        for(int i = 0; i < world->nb_murs; i++){
+            collide(world->vaisseau, world->murs[i], world, 0);
+        }
+        collide(world->vaisseau, world->ligneArriver, world, 1);
 
-    allEvents(world);
+        allEvents(world);
 
-    world->timer = SDL_GetTicks(); 
+        world->timer = SDL_GetTicks(); 
+    }
 }
 
 
@@ -41,6 +43,7 @@ void init_data(world_t * world){
     world->str = malloc(sizeof(char)*100);
     world->angle = 0.0;
     world->isFlipping = 0;
+    world->isMenu = true;
 }
 
 
@@ -92,8 +95,17 @@ void flipScreen(world_t *world){
 void init_walls(world_t *world){
     world->nb_murs = 0;
     world->murs = malloc(sizeof(sprite_t) * MAX_LENGTH*MAX_LINES);
+    // char **murs2 = malloc(sizeof(char*) * MAX_LENGTH*MAX_LINES);
     world->nb_lines_murs = 0;
+    int nb_elements = 0;
     char **txt = lirefile("maps/default.txt", &world->nb_lines_murs);
+
+    // for (int i = 0; i < world->nb_lines_murs; i++) {
+    //     for (int j = 0; j < MAX_LENGTH; j++) {
+    //         murs2[nb_elements] = txt[i][j];
+    //         nb_elements++;
+    //     }
+    // }
 
     for (int i = 0; i < world->nb_lines_murs; i++) {
         for (int j = 0; j < MAX_LENGTH; j++) {
@@ -103,6 +115,10 @@ void init_walls(world_t *world){
             }
         }
     }   
+}
+
+void wallChoose(world_t *world, char **murs, int posX, int posY){
+    return;
 }
 
 void update_walls(world_t *world){

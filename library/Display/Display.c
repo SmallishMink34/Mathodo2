@@ -75,19 +75,19 @@ void refresh_graphics(SDL_Renderer *renderer, world_t *world,ressources_t *textu
     //application des textures dans le renderer
     apply_background(renderer, textures->background, world);
 
-    apply_sprite(renderer, textures->ship, world->vaisseau, world);
+    if (!world->isMenu){
+        apply_sprite(renderer, textures->ship, world->vaisseau, world);
+        apply_sprite(renderer, textures->finishLine, world->ligneArriver, world);
+        apply_walls(renderer, textures->meteorite, world, textures);
 
-    apply_sprite(renderer, textures->finishLine, world->ligneArriver, world);
-
-    apply_walls(renderer, textures->meteorite, world, textures);
-
-    if (timer_update_s(world) != 0){
-        world->str[0] = '\0';
-        world->str = strcats(world->str, 3, "temps: ",int_to_str((int)world->timer/1000), "s");
+        if (timer_update_s(world) != 0){
+            world->str[0] = '\0';
+            world->str = strcats(world->str, 3, "temps: ",int_to_str((int)world->timer/1000), "s");
+        }
+        apply_text(renderer, 10, 10, 100, 33, world->str, textures->font, textures->color); 
+    }else{
+        apply_text(renderer, 10, 10, 100, 33, "Menu", textures->font, textures->color);
     }
-
-    apply_text(renderer, 10, 10, 100, 33, world->str, textures->font, textures->color); 
-    
    
     update_screen(renderer);
     

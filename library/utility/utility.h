@@ -12,8 +12,8 @@
 
 #ifndef Utility_h
 #define Utility_h
-#define MAX_LINES 1000
-#define MAX_LENGTH 200
+#define MAX_LINES 500
+#define MAX_LENGTH 28
 
 /**
  * \brief Concatène plusieurs chaines de caractères

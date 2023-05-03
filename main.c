@@ -24,11 +24,13 @@
 void handle_events(SDL_Event *event,world_t *world){
     const Uint8 *keystates = SDL_GetKeyboardState(NULL);
 
-    if (keystates[SDL_SCANCODE_A]){
-        world->vaisseau->x -= MOVING_STEP; 
-    }
-    if(keystates[SDL_SCANCODE_D]){
-        world->vaisseau->x += MOVING_STEP;
+    if (!world->isMenu){
+        if (keystates[SDL_SCANCODE_A]){
+            world->vaisseau->x -= MOVING_STEP; 
+        }
+        if(keystates[SDL_SCANCODE_D]){
+            world->vaisseau->x += MOVING_STEP;
+        }
     }
 
     while( SDL_PollEvent( event ) ) {
@@ -42,21 +44,22 @@ void handle_events(SDL_Event *event,world_t *world){
          //si une touche est appuyée
          if(event->type == SDL_KEYDOWN){
              //si la touche appuyée est 'D'
-            
-            switch (event->key.keysym.sym){
-                case SDLK_z:
-                    world->speed_h = 4;
+            if (!world->isMenu){
+                switch (event->key.keysym.sym){
+                    case SDLK_z:
+                        world->speed_h = 4;
 
-                    printf("%f\n", world->speed_h);
-                    break;
-                case SDLK_s:
-                    world->speed_h = INITIAL_SPEED;
-                    break;
-                case SDLK_ESCAPE:
-                    world->gameover = 1;
-                    break;
-                default:
-                    break;
+                        printf("%f\n", world->speed_h);
+                        break;
+                    case SDLK_s:
+                        world->speed_h = INITIAL_SPEED;
+                        break;
+                    case SDLK_ESCAPE:
+                        world->gameover = 1;
+                        break;
+                    default:
+                        break;
+                }
             }
             //  print_sprite(world->vaisseau);
         }
