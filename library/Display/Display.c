@@ -4,13 +4,17 @@
 #include <math.h>
 
 void init_ressource(SDL_Renderer *renderer, ressources_t *textures){
-    textures->background = load_image( "ressources/Elements/background2.bmp",renderer);
+    textures->background = load_image( "ressources/Elements/backgrounds/1.png",renderer);
+    textures->background2 = load_image( "ressources/Elements/backgrounds/3.png",renderer);
+    textures->background3 = load_image( "ressources/Elements/backgrounds/2.png",renderer);
     textures->ship = load_image( "ressources/spaceship.bmp",renderer);
     
     textures->finishLine = load_image( "ressources/finish_line.bmp",renderer);
     textures->font = load_font("ressources/font/arial.ttf", 14);
     textures->color = (SDL_Color){255, 255, 255, 255};
 
+    textures->BarreProgression = load_image( "ressources/Elements/BarreProgression.png",renderer);
+    textures->vaisseauMini = load_image( "ressources/spaceship.bmp",renderer);
     init_ressource_element(renderer, textures);
 }
 
@@ -19,10 +23,10 @@ void init_ressource_element(SDL_Renderer *renderer, ressources_t *textures){
     textures->e_rotate = load_image("ressources/Elements/reverse.bmp", renderer);
 }
 
-void apply_background(SDL_Renderer *renderer, SDL_Texture *texture, world_t *world){
+void apply_background(SDL_Renderer *renderer, SDL_Texture *texture, world_t *world, int parallax){
     if(texture != NULL){
-        //printf("%f %f\n", (SCREEN_WIDTH/2+(0-SCREEN_WIDTH/2)*cos(angle)-(0-SCREEN_HEIGHT/2)*sin(angle)), (SCREEN_HEIGHT/2+(0-SCREEN_WIDTH/2)*sin(angle)+(0-SCREEN_HEIGHT/2)*cos(angle)));
-      apply_texture(texture, renderer, 0, 0, world->angle*180/M_PI);
+        apply_texture(texture, renderer, 0, -1800+world->parallax/parallax, world->angle*180/M_PI);
+
     }
 }
 
@@ -73,7 +77,9 @@ void refresh_graphics(SDL_Renderer *renderer, world_t *world,ressources_t *textu
     clear_renderer(renderer);
     
     //application des textures dans le renderer
-    apply_background(renderer, textures->background, world);
+    apply_background(renderer, textures->background, world, 7);
+    apply_background(renderer, textures->background2, world, 3);
+    apply_background(renderer, textures->background3, world, 9);
 
     if (!world->isMenu){
         apply_sprite(renderer, textures->ship, world->vaisseau, world);
@@ -87,8 +93,11 @@ void refresh_graphics(SDL_Renderer *renderer, world_t *world,ressources_t *textu
         apply_text(renderer, 10, 10, 100, 33, world->str, textures->font, textures->color); 
     }else{
         apply_text(renderer, 10, 10, 100, 33, "Menu", textures->font, textures->color);
+        printf("aaa");
     }
-   
+    
+    apply_sprite(renderer, textures->BarreProgression, world->BarreProgression, world);
+    apply_sprite(renderer, textures->vaisseauMini, world->vaisseauMini, world);
     update_screen(renderer);
     
 }

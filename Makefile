@@ -1,5 +1,5 @@
 CFLAGS = -O3 -Dmain=SDL_main
-LDFLAGS = -lm -lmingw32 -lSDL2main -lSDL2 -lSDL2_ttf
+LDFLAGS = -lm -lmingw32 -lSDL2main -lSDL2 -lSDL2_ttf -lSDL2_image
 SDL2_INCLUDE_DIR = src/include
 SDL2_LIBRARIES_DIR = src/lib
 

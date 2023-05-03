@@ -1,9 +1,33 @@
 #include "world.h"
 #include "../utility/utility.h"
 
+
+void init_data(world_t * world){
+    //on n'est pas à la fin du jeu
+    world->gameover = 0;
+    world->speed_h = (float)INITIAL_SPEED;
+    // Initialisation du vaisseau
+    world->vaisseau = init_sprite(world->vaisseau, SCREEN_WIDTH/2 - SHIP_SIZE/2, SCREEN_HEIGHT - SHIP_SIZE-15, SHIP_SIZE, SHIP_SIZE, '0');
+    init_walls(world);
+    world->ligneArriver = init_sprite(world->ligneArriver, 0, -world->nb_lines_murs*METEORITE_SIZE-30 , SCREEN_WIDTH, FINISH_LINE_HEIGHT, 'z');
+    world->BarreProgression = init_sprite(world->BarreProgression, 10, SCREEN_HEIGHT - 500, 50, 400, 'y');
+    world->vaisseauMini = init_sprite(world->vaisseauMini, 10, SCREEN_HEIGHT - 130, 20, 20, 'x');
+    print_sprite(world->vaisseau);
+    world->startTimer = SDL_GetTicks();
+    world->timer = SDL_GetTicks();
+    world->str = malloc(sizeof(char)*100);
+    world->angle = 0.0;
+    world->isFlipping = 0;
+    world->isMenu = false;
+    world->parallax = 0;
+}
+
 void update_data(world_t *world){
     if (!world->isMenu){
         world->ligneArriver->y += (int)world->speed_h;
+        world->vaisseauMini->y = 16028 + world->ligneArriver->y +  SCREEN_HEIGHT -100;
+        printf("%d\n", world->ligneArriver->y);
+        world->parallax += (int)world->speed_h;
         update_walls(world);
         if (isOverScreen(world->vaisseau)){
             if (world->vaisseau->x < 0) world->vaisseau->x = 0;
@@ -25,25 +49,6 @@ void update_data(world_t *world){
 
 int is_game_over(world_t *world){
     return world->gameover;
-}
-
-
-void init_data(world_t * world){
-    //on n'est pas à la fin du jeu
-    world->gameover = 0;
-    world->speed_h = (float)INITIAL_SPEED;
-    // Initialisation du vaisseau
-    world->vaisseau = init_sprite(world->vaisseau, SCREEN_WIDTH/2 - SHIP_SIZE/2, SCREEN_HEIGHT - SHIP_SIZE, SHIP_SIZE, SHIP_SIZE, '0');
-    init_walls(world);
-    world->ligneArriver = init_sprite(world->ligneArriver, 0, -world->nb_lines_murs*METEORITE_SIZE-30 , SCREEN_WIDTH, FINISH_LINE_HEIGHT, 'z');
-    
-    print_sprite(world->vaisseau);
-    world->startTimer = SDL_GetTicks();
-    world->timer = SDL_GetTicks();
-    world->str = malloc(sizeof(char)*100);
-    world->angle = 0.0;
-    world->isFlipping = 0;
-    world->isMenu = true;
 }
 
 
