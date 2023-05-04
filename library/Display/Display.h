@@ -41,6 +41,10 @@ struct ressources_s{
     SDL_Texture* finishLine; /*!< Texture liée à l'image de la ligne d'arrivée. */
     SDL_Texture* BarreProgression; /*!< Texture liée à l'image de l'air. */
     SDL_Texture* vaisseauMini; /*!< Texture liée à l'image du vaisseau. */
+
+    SDL_Texture* soleilBarre; /*!< Texture liée à l'image du soleil. */
+    SDL_Texture* soleil; /*!< Texture liée à l'image du soleil. */
+
     TTF_Font *font; // Font
     SDL_Color color; // Color
     long double angle; /*!< Angle de rotation de l'image. */

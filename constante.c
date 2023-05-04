@@ -22,6 +22,7 @@
 
 #define METEORITE_SIZE 32
 
+#define METEORITE_REAL_SIZE 34
 
 /**
  * \brief Hauteur de la ligne d'arrivée
@@ -42,4 +43,16 @@
   * \brief Vitesse initiale de déplacement vertical des éléments du jeu 
 */
 
-#define INITIAL_SPEED 2
+#define INITIAL_SPEED 16
+
+/**
+ * \brief Nombre de lignes de météorites
+ * 
+ */
+#define MAX_LINES 500
+
+/**
+ * \brief Nombre maximum de météorite par ligne
+ * 
+ */
+#define MAX_LENGTH 28

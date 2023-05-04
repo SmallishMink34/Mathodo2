@@ -7,14 +7,18 @@ void init_ressource(SDL_Renderer *renderer, ressources_t *textures){
     textures->background = load_image( "ressources/Elements/backgrounds/1.png",renderer);
     textures->background2 = load_image( "ressources/Elements/backgrounds/3.png",renderer);
     textures->background3 = load_image( "ressources/Elements/backgrounds/2.png",renderer);
-    textures->ship = load_image( "ressources/spaceship.bmp",renderer);
+    textures->ship = load_image( "ressources/Elements/Ship_1.png",renderer);
     
     textures->finishLine = load_image( "ressources/finish_line.bmp",renderer);
     textures->font = load_font("ressources/font/arial.ttf", 14);
     textures->color = (SDL_Color){255, 255, 255, 255};
 
     textures->BarreProgression = load_image( "ressources/Elements/BarreProgression.png",renderer);
-    textures->vaisseauMini = load_image( "ressources/spaceship.bmp",renderer);
+    textures->vaisseauMini = textures->ship;
+
+    textures->soleilBarre = load_image( "ressources/Elements/soleil.png",renderer);
+    textures->soleil = load_image( "ressources/Elements/soleil.png",renderer);
+
     init_ressource_element(renderer, textures);
 }
 
@@ -85,19 +89,22 @@ void refresh_graphics(SDL_Renderer *renderer, world_t *world,ressources_t *textu
         apply_sprite(renderer, textures->ship, world->vaisseau, world);
         apply_sprite(renderer, textures->finishLine, world->ligneArriver, world);
         apply_walls(renderer, textures->meteorite, world, textures);
-
+        apply_sprite(renderer, textures->soleil, world->soleil, world);
         if (timer_update_s(world) != 0){
             world->str[0] = '\0';
             world->str = strcats(world->str, 3, "temps: ",int_to_str((int)world->timer/1000), "s");
         }
         apply_text(renderer, 10, 10, 100, 33, world->str, textures->font, textures->color); 
+        apply_sprite(renderer, textures->BarreProgression, world->BarreProgression, world);
+        apply_sprite(renderer, textures->vaisseauMini, world->vaisseauMini, world);
+        apply_sprite(renderer, textures->soleilBarre, world->soleilBarre, world);
+        
     }else{
         apply_text(renderer, 10, 10, 100, 33, "Menu", textures->font, textures->color);
         printf("aaa");
     }
     
-    apply_sprite(renderer, textures->BarreProgression, world->BarreProgression, world);
-    apply_sprite(renderer, textures->vaisseauMini, world->vaisseauMini, world);
+    
     update_screen(renderer);
     
 }

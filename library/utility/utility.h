@@ -9,11 +9,10 @@
  * 
  */
 #include <stdarg.h>
-
+#include "../../constante.c"
 #ifndef Utility_h
 #define Utility_h
-#define MAX_LINES 500
-#define MAX_LENGTH 28
+
 
 /**
  * \brief Concatène plusieurs chaines de caractères

@@ -20,6 +20,7 @@ sprite_t *init_sprite(sprite_t *sprite, int x, int y, int w, int h, char id){
     sprite->w = w;
     sprite->h = h;
     sprite->id = malloc(sizeof(char) * 10);
+    sprite->dy = 0.0;
     strcpy(sprite->id, &id);
 
     return sprite;

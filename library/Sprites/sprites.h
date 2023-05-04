@@ -28,6 +28,7 @@ struct sprite_s{
     int y;
     int w;
     int h;
+    float dy;
     char * id;
 };
 

@@ -6,27 +6,36 @@ void init_data(world_t * world){
     //on n'est pas à la fin du jeu
     world->gameover = 0;
     world->speed_h = (float)INITIAL_SPEED;
+    init_walls(world);
     // Initialisation du vaisseau
     world->vaisseau = init_sprite(world->vaisseau, SCREEN_WIDTH/2 - SHIP_SIZE/2, SCREEN_HEIGHT - SHIP_SIZE-15, SHIP_SIZE, SHIP_SIZE, '0');
-    init_walls(world);
-    world->ligneArriver = init_sprite(world->ligneArriver, 0, -world->nb_lines_murs*METEORITE_SIZE-30 , SCREEN_WIDTH, FINISH_LINE_HEIGHT, 'z');
+    world->ligneArriver = init_sprite(world->ligneArriver, 0, -world->nb_lines_murs*METEORITE_REAL_SIZE-30 , SCREEN_WIDTH, FINISH_LINE_HEIGHT, 'z');
     world->BarreProgression = init_sprite(world->BarreProgression, 10, SCREEN_HEIGHT - 500, 50, 400, 'y');
     world->vaisseauMini = init_sprite(world->vaisseauMini, 10, SCREEN_HEIGHT - 130, 20, 20, 'x');
+    world->soleilBarre = init_sprite(world->soleilBarre, 0, SCREEN_HEIGHT - 510, 40, 40, 'x');
+    world->soleil = init_sprite(world->soleil, SCREEN_WIDTH/2-1800/2, -world->nb_lines_murs*METEORITE_REAL_SIZE-1400, 1800, 1800, 'z');
+
+    world->vaisseauMini->y = SCREEN_HEIGHT - (110);
+    world->vaisseauMini->dy = SCREEN_HEIGHT - (110);
     print_sprite(world->vaisseau);
     world->startTimer = SDL_GetTicks();
     world->timer = SDL_GetTicks();
     world->str = malloc(sizeof(char)*100);
     world->angle = 0.0;
     world->isFlipping = 0;
-    world->isMenu = false;
+    world->isMenu = false; 
     world->parallax = 0;
+    world->invicibility = true;
 }
 
 void update_data(world_t *world){
     if (!world->isMenu){
         world->ligneArriver->y += (int)world->speed_h;
-        world->vaisseauMini->y = 16028 + world->ligneArriver->y +  SCREEN_HEIGHT -100;
-        printf("%d\n", world->ligneArriver->y);
+        world->soleil->y += (int)world->speed_h;
+
+        world->vaisseauMini->dy -= world->speed_h/(MAX_LINES*METEORITE_REAL_SIZE+700)*400;
+        world->vaisseauMini->y = (int)world->vaisseauMini->dy;
+
         world->parallax += (int)world->speed_h;
         update_walls(world);
         if (isOverScreen(world->vaisseau)){
@@ -35,8 +44,10 @@ void update_data(world_t *world){
             if (world->vaisseau->y < 0) world->vaisseau->y = 0;
             if (world->vaisseau->y + world->vaisseau->h > SCREEN_HEIGHT) world->vaisseau->y = SCREEN_HEIGHT - world->vaisseau->h;
         }
-        for(int i = 0; i < world->nb_murs; i++){
-            collide(world->vaisseau, world->murs[i], world, 0);
+        if (!world->invicibility){
+            for(int i = 0; i < world->nb_murs; i++){
+                collide(world->vaisseau, world->murs[i], world, 0);
+            }
         }
         collide(world->vaisseau, world->ligneArriver, world, 1);
 

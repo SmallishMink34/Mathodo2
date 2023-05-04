@@ -39,6 +39,8 @@ struct world_s{
     sprite_t **murs2; /*<Représentation des météorites et de l'air>*/
     sprite_t *BarreProgression;
     sprite_t *vaisseauMini;
+    sprite_t *soleilBarre;
+    sprite_t *soleil;
     int nb_murs; // Nombre de météorites
     int nb_lines_murs; // Nombre de lignes de météorites
     sprite_t *ligneArriver;
@@ -52,6 +54,7 @@ struct world_s{
     bool isMenu;
 
     int parallax;
+    bool invicibility;
 };
 typedef struct world_s world_t;
 
