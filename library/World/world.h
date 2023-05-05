@@ -4,6 +4,7 @@
 #include "../../constante.c"
 #include "../../src/include/SDL2/SDL.h"
 #include <stdbool.h>
+#include "../menu/menu.h"
 
 /**
  * \file world.h
@@ -37,6 +38,9 @@ struct world_s{
     sprite_t *vaisseau ; /*!< Représentation du vaisseau */
     sprite_t **murs; /*<Représentation des météorites>*/
     sprite_t **murs2; /*<Représentation des météorites et de l'air>*/
+
+    btn_t *play;
+
     int nb_murs; // Nombre de météorites
     int nb_lines_murs; // Nombre de lignes de météorites
     sprite_t *ligneArriver;
@@ -48,6 +52,9 @@ struct world_s{
     double angle; // Angle de rotation de la map
     int isFlipping; // Indique si l'on est en train de faire une rotation de l'écran et dans quelle sens (0 : non droite, 1 : vers la droite, -1 : vers la gauche, -2 : non gauche)
     bool isMenu;
+
+    int mouseX;
+    int mouseY;
 };
 typedef struct world_s world_t;
 

@@ -19,6 +19,10 @@ void update_data(world_t *world){
         allEvents(world);
 
         world->timer = SDL_GetTicks(); 
+    }else{
+        if (collidePoint(world->play, world->mouseX, world->mouseY)){
+            world->isMenu = false;
+        }
     }
 }
 
@@ -37,6 +41,8 @@ void init_data(world_t * world){
     init_walls(world);
     world->ligneArriver = init_sprite(world->ligneArriver, 0, -world->nb_lines_murs*METEORITE_SIZE-30 , SCREEN_WIDTH, FINISH_LINE_HEIGHT, 'z');
     
+    world->play = init_btn(0, 0, 100, 100);
+
     print_sprite(world->vaisseau);
     world->startTimer = SDL_GetTicks();
     world->timer = SDL_GetTicks();
@@ -44,6 +50,9 @@ void init_data(world_t * world){
     world->angle = 0.0;
     world->isFlipping = 0;
     world->isMenu = true;
+
+    world->mouseX = 0;
+    world->mouseY = 0;
 }
 
 
