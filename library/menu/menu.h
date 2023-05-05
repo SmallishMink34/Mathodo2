@@ -5,17 +5,15 @@
 #ifndef DEF_CONSTANTES
 #define DEF_CONSTANTES 
 
-#define LARGEUR_FENETRE 704
-#define HAUTEUR_FENETRE 704
-
+#include <stdbool.h>
 
 struct btn{
     SDL_Rect rect;
-}
+};
 
-typedef struct btn_t ;
+typedef struct btn btn_t;
 
 btn_t *init_btn(int x, int y, int w, int h);
-int collidePoint(btn_t *btn, int x, int y);
+bool collidePoint(btn_t *btn, int x, int y);
 
 #endif

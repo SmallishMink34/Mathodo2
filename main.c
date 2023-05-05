@@ -44,7 +44,7 @@ void handle_events(SDL_Event *event,world_t *world){
         }
        
          //si une touche est appuyée
-         if(event->type == SDL_KEYDOWN){
+         if(event->type == SDL_KEYDOWN){ 
              //si la touche appuyée est 'D'
             if (!world->isMenu){
                 switch (event->key.keysym.sym){
@@ -63,7 +63,20 @@ void handle_events(SDL_Event *event,world_t *world){
                         break;
                 }
             }
+            
             //  print_sprite(world->vaisseau);
+        }
+        if (event->type == SDL_MOUSEBUTTONDOWN){
+            printf("aaa");
+            if (world->isMenu){
+                if (event->button.button == SDL_BUTTON_LEFT){
+                    printf("mouse(%d, %d) world rect (%d %d %d %d)\n", world->mouseX, world->mouseY, world->play->rect.x,world->play->rect.y,world->play->rect.w,world->play->rect.h );
+                    if (collidePoint(world->play, world->mouseX, world->mouseY)){
+                        printf("tesy");
+                        world->isMenu = false;
+                    }
+                }
+            }
         }
     }
 }

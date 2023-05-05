@@ -19,10 +19,6 @@ void update_data(world_t *world){
         allEvents(world);
 
         world->timer = SDL_GetTicks(); 
-    }else{
-        if (collidePoint(world->play, world->mouseX, world->mouseY)){
-            world->isMenu = false;
-        }
     }
 }
 

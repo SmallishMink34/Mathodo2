@@ -87,9 +87,9 @@ void refresh_graphics(SDL_Renderer *renderer, world_t *world,ressources_t *textu
         apply_text(renderer, 10, 10, 100, 33, world->str, textures->font, textures->color); 
     }else{
         apply_text(renderer, 10, 10, 100, 33, "Menu", textures->font, textures->color);
-        apply_text(renderer, 10, 10, 100, 33, "Jouer", textures->font, textures->color);
-        apply_text(renderer, 10, 10, 100, 33, "Magasin", textures->font, textures->color);
-        apply_text(renderer, 10, 10, 100, 33, "Exit", textures->font, textures->color);
+        apply_text(renderer, 100, 100, 100, 33, "Jouer", textures->font, textures->color);
+        apply_text(renderer, 100, 200, 100, 33, "Magasin", textures->font, textures->color);
+        apply_text(renderer, 100, 300, 100, 33, "Exit", textures->font, textures->color);
     }
    
     update_screen(renderer);
