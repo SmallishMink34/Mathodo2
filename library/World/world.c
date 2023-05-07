@@ -37,7 +37,10 @@ void init_data(world_t * world){
     init_walls(world);
     world->ligneArriver = init_sprite(world->ligneArriver, 0, -world->nb_lines_murs*METEORITE_SIZE-30 , SCREEN_WIDTH, FINISH_LINE_HEIGHT, 'z');
     
-    world->play = init_btn(0, 0, 100, 100);
+    world->play = init_btn(100,40, 80, 80);
+    world->exit = init_btn(100, 300, 80, 80);
+    world->magasin = init_btn(100, 150, 80, 80);
+    world->sound = init_btn(0, 0, 100, 100);
 
     print_sprite(world->vaisseau);
     world->startTimer = SDL_GetTicks();

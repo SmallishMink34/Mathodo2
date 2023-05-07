@@ -75,6 +75,14 @@ void handle_events(SDL_Event *event,world_t *world){
                         printf("tesy");
                         world->isMenu = false;
                     }
+                    if (collidePoint(world->magasin, world->mouseX, world->mouseY)){
+                        printf("tesy");
+                        world->isMenu = false;
+                    }
+                    if (collidePoint(world->exit, world->mouseX, world->mouseY)){
+                        printf("tesy");
+                        world->gameover = true;
+                    }
                 }
             }
         }

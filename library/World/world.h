@@ -40,7 +40,10 @@ struct world_s{
     sprite_t **murs2; /*<Représentation des météorites et de l'air>*/
 
     btn_t *play;
-
+    btn_t *exit;
+    btn_t *magasin;
+    btn_t *sound;
+    
     int nb_murs; // Nombre de météorites
     int nb_lines_murs; // Nombre de lignes de météorites
     sprite_t *ligneArriver;
