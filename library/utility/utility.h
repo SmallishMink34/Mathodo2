@@ -42,4 +42,5 @@ char * int_to_str(int n);
 
 char ** lirefile(char *filename, int *num_lines);
 
+int number_of_numbers(int n);
 #endif

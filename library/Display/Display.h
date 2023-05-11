@@ -79,7 +79,7 @@ void init_ressource_element(SDL_Renderer *renderer, ressources_t *textures);
 void apply_background(SDL_Renderer *renderer, SDL_Texture *texture, world_t *world, int parallax);
 
 /**
- * \brief La fonction qui applique la texture \a texture sur le renderer \a renderer en fonction des données du sprite \a sprite
+ * \brief La fonction qui applique la texture \a texture sur le renderer \a renderer en fonction des données du sprite \a sprite (avec rotation)
  * 
  * \param texture
  * \param renderer 
@@ -87,6 +87,15 @@ void apply_background(SDL_Renderer *renderer, SDL_Texture *texture, world_t *wor
  */
 void apply_sprite(SDL_Renderer * renderer, SDL_Texture *texture, sprite_t *sprite, world_t *world);
 
+/**
+ * @brief La fonction qui applique la texture \a texture sur le renderer \a renderer en fonction des données du sprite \a sprite (sans rotation)
+ * 
+ * @param renderer 
+ * @param texture 
+ * @param sprite 
+ * @param world 
+ */
+void apply_sprite_fixed(SDL_Renderer * renderer, SDL_Texture *texture, sprite_t *sprite, world_t *world);
 /**
  * \brief La fonction qui applique la texture \a texture sur le renderer \a renderer en fonction des coordonnées \a x et \a y
  * 
@@ -130,11 +139,4 @@ void clean_textures(ressources_t *textures);
 */
 void clean(SDL_Window *window, SDL_Renderer * renderer, ressources_t *textures, world_t * world);
 
-/**
- * \brief La fonction qui affiche le temps restant sur l'écran
- * 
- * \param world 
- * \return int 
- */
-int timer_update_s(world_t *world);
 #endif

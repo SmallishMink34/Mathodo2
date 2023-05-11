@@ -49,6 +49,19 @@ void apply_sprite(SDL_Renderer * renderer, SDL_Texture *texture, sprite_t *sprit
     }
 }
 
+void apply_sprite_fixed(SDL_Renderer * renderer, SDL_Texture *texture, sprite_t *sprite, world_t *world){
+    if(texture != NULL){
+        SDL_Rect rect;
+        rect.x = sprite->x;
+        rect.y = sprite->y;
+
+        rect.w = sprite->w;
+        rect.h = sprite->h;
+
+        SDL_RenderCopyEx(renderer, texture, NULL, &rect, world->angle*180/M_PI, NULL, SDL_FLIP_NONE);
+    }
+}
+
 void apply_wall(SDL_Renderer * renderer, SDL_Texture *texture, int x, int y,world_t *world){
     if(texture != NULL){
         SDL_Rect rect;
@@ -92,14 +105,12 @@ void refresh_graphics(SDL_Renderer *renderer, world_t *world,ressources_t *textu
         apply_sprite(renderer, textures->finishLine, world->ligneArriver, world);
         apply_walls(renderer, textures->meteorite, world, textures);
         apply_sprite(renderer, textures->soleil, world->soleil, world);
-        if (timer_update_s(world) != 0){
-            world->str[0] = '\0';
-            world->str = strcats(world->str, 3, "temps: ",int_to_str((int)world->timer/1000), "s");
-        }
         apply_text(renderer, 10, 10, 100, 33, world->str, textures->font, textures->color); 
-        apply_sprite(renderer, textures->BarreProgression, world->BarreProgression, world);
-        apply_sprite(renderer, textures->vaisseauMini, world->vaisseauMini, world);
-        apply_sprite(renderer, textures->soleilBarre, world->soleilBarre, world);
+        apply_text(renderer, SCREEN_WIDTH-(60+10*number_of_numbers(world->money)), 10, 15*number_of_numbers(world->money), 30, world->coins_str, textures->font, textures->color);
+        apply_sprite_fixed(renderer, textures->BarreProgression, world->BarreProgression, world);
+        apply_sprite_fixed(renderer, textures->vaisseauMini, world->vaisseauMini, world);
+        apply_sprite_fixed(renderer, textures->soleilBarre, world->soleilBarre, world);
+        apply_sprite_fixed(renderer, textures->coins, world->coins, world);
         
     }else{
         apply_text(renderer, 10, 10, 100, 33, "Menu", textures->font, textures->color);
@@ -107,13 +118,6 @@ void refresh_graphics(SDL_Renderer *renderer, world_t *world,ressources_t *textu
     }
     
     update_screen(renderer);
-}
-
-int timer_update_s(world_t *world){
-    if (world->timer%1000 <=  110|| world->timer%1000 >= 985){
-        return world->timer%1000;
-    }
-    return 0;
 }
 
 void clean(SDL_Window *window, SDL_Renderer * renderer, ressources_t *textures, world_t * world){
