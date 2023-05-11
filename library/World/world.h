@@ -41,6 +41,7 @@ struct world_s{
     sprite_t *vaisseauMini;
     sprite_t *soleilBarre;
     sprite_t *soleil;
+    sprite_t *air;
     int nb_murs; // Nombre de météorites
     int nb_lines_murs; // Nombre de lignes de météorites
     sprite_t *ligneArriver;
@@ -52,6 +53,7 @@ struct world_s{
     double angle; // Angle de rotation de la map
     int isFlipping; // Indique si l'on est en train de faire une rotation de l'écran et dans quelle sens (0 : non droite, 1 : vers la droite, -1 : vers la gauche, -2 : non gauche)
     bool isMenu;
+    int money;
 
     int parallax;
     bool invicibility;
@@ -117,6 +119,8 @@ void init_walls(world_t *world);
  * \param world 
  */
 void update_walls(world_t *world);
+
+void remove_wall(world_t *world, int index);
 
 /**
  * \brief La fonction qui execute toutes les actions du jeu

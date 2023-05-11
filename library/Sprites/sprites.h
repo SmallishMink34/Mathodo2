@@ -30,6 +30,7 @@ struct sprite_s{
     int h;
     float dy;
     char * id;
+    int indice;
 };
 
 typedef struct sprite_s sprite_t;
@@ -59,7 +60,7 @@ void print_sprite(sprite_t *sprite);
  * \param h 
  * \return sprite_t* 
  */
-sprite_t *init_sprite(sprite_t *sprite, int x, int y, int w, int h, char id);
+sprite_t *init_sprite(sprite_t *sprite, int x, int y, int w, int h, char id, int indice);
 
 /**
  * \brief La fonction indique si les sprites se touchent

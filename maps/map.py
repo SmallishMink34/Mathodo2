@@ -21,6 +21,8 @@ for pixel in pixels:
         file.write("1")
     elif pixel[0] == 255 and pixel[1] == 0 and pixel[2] == 0:
         file.write("2")
+    elif pixel[0] == 0 and pixel[1] == 255 and pixel[2] == 0 and pixel[3] > 80:
+        file.write("3")
     else:
         file.write("0")
     compteur += 1

@@ -48,8 +48,6 @@ void handle_events(SDL_Event *event,world_t *world){
                 switch (event->key.keysym.sym){
                     case SDLK_z:
                         world->speed_h = 4;
-
-                        printf("%f\n", world->speed_h);
                         break;
                     case SDLK_s:
                         world->speed_h = INITIAL_SPEED;

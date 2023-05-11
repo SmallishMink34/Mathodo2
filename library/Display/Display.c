@@ -18,19 +18,21 @@ void init_ressource(SDL_Renderer *renderer, ressources_t *textures){
 
     textures->soleilBarre = load_image( "ressources/Elements/soleil.png",renderer);
     textures->soleil = load_image( "ressources/Elements/soleil.png",renderer);
-
+    textures->nb_init = 9;
     init_ressource_element(renderer, textures);
+    
 }
 
 void init_ressource_element(SDL_Renderer *renderer, ressources_t *textures){
     textures->meteorite = load_image( "ressources/meteorite.bmp",renderer);
     textures->e_rotate = load_image("ressources/Elements/reverse.bmp", renderer);
+    textures->coins = load_image("ressources/Elements/coin.png", renderer);
+    textures->nb_init += 3;
 }
 
 void apply_background(SDL_Renderer *renderer, SDL_Texture *texture, world_t *world, int parallax){
     if(texture != NULL){
         apply_texture(texture, renderer, 0, -1800+world->parallax/parallax, world->angle*180/M_PI);
-
     }
 }
 
@@ -54,7 +56,6 @@ void apply_wall(SDL_Renderer * renderer, SDL_Texture *texture, int x, int y,worl
         rect.y = SCREEN_HEIGHT/2 + (x - SCREEN_WIDTH/2) * sin(world->angle) + (y - SCREEN_HEIGHT/2) * cos(world->angle);
         rect.w = METEORITE_SIZE;
         rect.h = METEORITE_SIZE;
-        
         if (SDL_RenderCopyEx(renderer, texture, NULL, &rect, world->angle*180/M_PI, NULL, SDL_FLIP_NONE) != 0){
             printf("ok\n");
         }
@@ -69,12 +70,13 @@ void apply_walls(SDL_Renderer * renderer, SDL_Texture *texture, world_t *world, 
                     apply_wall(renderer, res->meteorite, world->murs[i]->x+i3*METEORITE_SIZE, world->murs[i]->y+i2*METEORITE_SIZE, world);
                 }else if(strcmp(world->murs[i]->id, "2") == 0){
                     apply_wall(renderer, res->e_rotate, world->murs[i]->x+i3*METEORITE_SIZE, world->murs[i]->y+i2*METEORITE_SIZE, world);
+                }else if(strcmp(world->murs[i]->id, "3") == 0){
+                    apply_wall(renderer, res->coins, world->murs[i]->x+i3*METEORITE_SIZE, world->murs[i]->y+i2*METEORITE_SIZE, world);
                 }
             }
         }
     }
 }
-
 
 void refresh_graphics(SDL_Renderer *renderer, world_t *world,ressources_t *textures){
     //on vide le renderer
@@ -104,9 +106,7 @@ void refresh_graphics(SDL_Renderer *renderer, world_t *world,ressources_t *textu
         printf("aaa");
     }
     
-    
     update_screen(renderer);
-    
 }
 
 int timer_update_s(world_t *world){
