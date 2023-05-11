@@ -5,6 +5,7 @@
 
 void init_ressource(SDL_Renderer *renderer, ressources_t *textures){
     textures->background = load_image( "ressources/Elements/background2.bmp",renderer);
+    textures->bmenu = load_image( "ressources/image-menu.bmp",renderer);
     textures->ship = load_image( "ressources/spaceship.bmp",renderer);
     
     textures->finishLine = load_image( "ressources/finish_line.bmp",renderer);
@@ -72,10 +73,22 @@ void refresh_graphics(SDL_Renderer *renderer, world_t *world,ressources_t *textu
     //on vide le renderer
     clear_renderer(renderer);
     
-    //application des textures dans le renderer
-    apply_background(renderer, textures->background, world);
+    
 
-    if (!world->isMenu){
+    if (world->isMenu == 0){
+        ingame(renderer,world,textures);
+    }else if(world -> isMenu==1){
+        inmenu(renderer,world,textures);
+    }
+   
+    update_screen(renderer);
+    
+}
+void inmenu(SDL_Renderer *renderer, world_t *world,ressources_t *textures){
+    apply_background(renderer, textures->bmenu, world);
+}
+void ingame(SDL_Renderer *renderer, world_t *world,ressources_t *textures){
+    apply_background(renderer, textures->background, world);//application des textures dans le renderer
         apply_sprite(renderer, textures->ship, world->vaisseau, world);
         apply_sprite(renderer, textures->finishLine, world->ligneArriver, world);
         apply_walls(renderer, textures->meteorite, world, textures);
@@ -85,15 +98,7 @@ void refresh_graphics(SDL_Renderer *renderer, world_t *world,ressources_t *textu
             world->str = strcats(world->str, 3, "temps: ",int_to_str((int)world->timer/1000), "s");
         }
         apply_text(renderer, 10, 10, 100, 33, world->str, textures->font, textures->color); 
-    }else{
-        apply_text(renderer, 10, 10, 100, 33, "Menu", textures->font, textures->color);
-        apply_text(renderer, 100, 100, 100, 33, "Jouer", textures->font, textures->color);
-        apply_text(renderer, 100, 200, 100, 33, "Magasin", textures->font, textures->color);
-        apply_text(renderer, 100, 300, 100, 33, "Exit", textures->font, textures->color);
-    }
-   
-    update_screen(renderer);
-    
+
 }
 
 int timer_update_s(world_t *world){

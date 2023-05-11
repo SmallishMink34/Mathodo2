@@ -24,6 +24,7 @@
  * \brief La structure qui contient les textures du jeu
  * 
  * \param background
+ * \param bmenu
  * \param ship
  * \param meteorite
  * \param finishLine
@@ -33,6 +34,7 @@
  */
 struct ressources_s{
     SDL_Texture* background; /*!< Texture liée à l'image du fond de l'écran. */
+    SDL_Texture* bmenu;/*!< Texture liée à l'image du fond du menu. */
     SDL_Texture* ship; /*!< Texture liée à l'image du vaisseau. */
     SDL_Texture* meteorite; /*!< Texture liée à l'image du météorite. */
     SDL_Texture* e_rotate; /*!< Texture liée à l'image de l'élément de rotation. */
@@ -126,4 +128,9 @@ void clean(SDL_Window *window, SDL_Renderer * renderer, ressources_t *textures, 
  * \return int 
  */
 int timer_update_s(world_t *world);
+
+void ingame(SDL_Renderer *renderer, world_t *world,ressources_t *textures);
+
+void inmenu(SDL_Renderer *renderer, world_t *world,ressources_t *textures);
+
 #endif

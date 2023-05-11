@@ -2,7 +2,7 @@
 #include "../utility/utility.h"
 
 void update_data(world_t *world){
-    if (!world->isMenu){
+    if (world->isMenu==0){
         world->ligneArriver->y += (int)world->speed_h;
         update_walls(world);
         if (isOverScreen(world->vaisseau)){
@@ -36,24 +36,25 @@ void init_data(world_t * world){
     world->vaisseau = init_sprite(world->vaisseau, SCREEN_WIDTH/2 - SHIP_SIZE/2, SCREEN_HEIGHT - SHIP_SIZE, SHIP_SIZE, SHIP_SIZE, '0');
     init_walls(world);
     world->ligneArriver = init_sprite(world->ligneArriver, 0, -world->nb_lines_murs*METEORITE_SIZE-30 , SCREEN_WIDTH, FINISH_LINE_HEIGHT, 'z');
-    
-    world->play = init_btn(100,40, 80, 80);
-    world->exit = init_btn(100, 300, 80, 80);
-    world->magasin = init_btn(100, 150, 80, 80);
-    world->sound = init_btn(0, 0, 100, 100);
-
+    InitMenu(world);
     print_sprite(world->vaisseau);
     world->startTimer = SDL_GetTicks();
     world->timer = SDL_GetTicks();
     world->str = malloc(sizeof(char)*100);
     world->angle = 0.0;
     world->isFlipping = 0;
-    world->isMenu = true;
+    world->isMenu = 1;
 
     world->mouseX = 0;
     world->mouseY = 0;
 }
 
+void InitMenu(world_t * world){
+    world->play = init_btn(203,129, 218, 97);
+    world->exit = init_btn(202,294, 218, 97);
+    world->magasin = init_btn(436, 217, 218, 97);
+    world->sound = init_btn(0, 0, 100, 100);
+}
 
 void clean_data(world_t *world){
     /* utile uniquement si vous avez fait de l'allocation dynamique (malloc); la fonction ici doit permettre de libérer la mémoire (free) */

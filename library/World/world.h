@@ -54,7 +54,7 @@ struct world_s{
     char * str; // String affichant le temps sur le jeu
     double angle; // Angle de rotation de la map
     int isFlipping; // Indique si l'on est en train de faire une rotation de l'écran et dans quelle sens (0 : non droite, 1 : vers la droite, -1 : vers la gauche, -2 : non gauche)
-    bool isMenu;
+    int isMenu;
 
     int mouseX;
     int mouseY;
@@ -127,4 +127,6 @@ void update_walls(world_t *world);
  * \param world 
  */
 void allEvents(world_t *world);
+
+void InitMenu(world_t *world);
 #endif
