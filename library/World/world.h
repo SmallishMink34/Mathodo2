@@ -57,7 +57,7 @@ struct world_s{
     float speed_h; /*!< Vitesse de déplacement horizontal des éléments du jeu */
     unsigned int startTimer; /*!< Timer de départ */
     unsigned int timer; /*!< Timer de jeu */
-    char * str; // String affichant le temps sur le jeu
+    char * temps_str; // String affichant le temps sur le jeu
     char * coins_str;
 
     double angle; // Angle de rotation de la map
@@ -66,7 +66,6 @@ struct world_s{
 
     int mouseX;
     int mouseY;
-    bool isMenu;
     int money;
     int money2;
 

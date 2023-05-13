@@ -107,7 +107,7 @@ void init(SDL_Window **window, SDL_Renderer ** renderer, ressources_t *textures,
     // Initialisation du ttf
     init_ttf();
     init_ressource(*renderer,textures);
-
+    
 }
 
 
@@ -133,13 +133,13 @@ int main( int argc, char* args[] )
         frameTime = SDL_GetTicks() - ticks;
         //gestion des évènements
         handle_events(&event,&world);
-
+        
         //mise à jour des données liée à la physique du monde
         update_data(&world);
 
         //rafraichissement de l'écran
         refresh_graphics(renderer,&world,&textures);
-
+        
         if (frameTime < 16) {
             SDL_Delay(16 - frameTime); // 16 ms = 60 fps
         }

@@ -4,36 +4,40 @@
 void update_data(world_t *world){
     if (world->isMenu==0){
         world->ligneArriver->y += (int)world->speed_h;
+        world->soleil->y += (int)world->speed_h;
+
+        world->vaisseauMini->dy -= world->speed_h/(MAX_LINES*METEORITE_REAL_SIZE+700)*400;
+        world->vaisseauMini->y = (int)world->vaisseauMini->dy;
+
+        outBorder(world);
+
+        world->parallax += (int)world->speed_h;
+
         update_walls(world);
-        if (isOverScreen(world->vaisseau)){
-            if (world->vaisseau->x < 0) world->vaisseau->x = 0;
-            if (world->vaisseau->x + world->vaisseau->w > SCREEN_WIDTH) world->vaisseau->x = SCREEN_WIDTH - world->vaisseau->w;
-            if (world->vaisseau->y < 0) world->vaisseau->y = 0;
-            if (world->vaisseau->y + world->vaisseau->h > SCREEN_HEIGHT) world->vaisseau->y = SCREEN_HEIGHT - world->vaisseau->h;
+        world->money2 = world->money;
+        if (!world->invicibility){
+            for(int i = 0; i < world->nb_murs; i++){
+                collide(world->vaisseau, world->murs[i], world);
+            }
         }
-        for(int i = 0; i < world->nb_murs; i++){
-            collide(world->vaisseau, world->murs[i], world, 0);
+        collide(world->vaisseau, world->ligneArriver, world);
+        if (timer_update_s(world) != 0){
+            world->temps_str[0] = '\0';
+            world->temps_str = strcats(world->temps_str, 3, "temps: ",int_to_str((int)world->timer/1000), "s");
         }
-        collide(world->vaisseau, world->ligneArriver, world, 1);
-
         allEvents(world);
-
-        world->timer = SDL_GetTicks(); 
+        world->timer = SDL_GetTicks() - world->startTimer;; 
+    }else if(world->isMenu == 1){
+        world->startTimer = SDL_GetTicks();
     }
 }
-
-
-int is_game_over(world_t *world){
-    return world->gameover;
-}
-
 
 void init_data(world_t * world){
     //on n'est pas à la fin du jeu
     world->gameover = 0;
     world->speed_h = (float)INITIAL_SPEED;
     init_walls(world);
-    world->ligneArriver = init_sprite(world->ligneArriver, 0, -world->nb_lines_murs*METEORITE_SIZE-30 , SCREEN_WIDTH, FINISH_LINE_HEIGHT, 'z');
+    world->ligneArriver = init_sprite(world->ligneArriver, 0, -world->nb_lines_murs*METEORITE_SIZE-30 , SCREEN_WIDTH, FINISH_LINE_HEIGHT, 'z', 0);
     InitMenu(world);
     print_sprite(world->vaisseau);
     // Initialisation du vaisseau
@@ -48,9 +52,8 @@ void init_data(world_t * world){
 
     world->vaisseauMini->y = SCREEN_HEIGHT - (110);
     world->vaisseauMini->dy = SCREEN_HEIGHT - (110);
-    world->startTimer = SDL_GetTicks();
     world->timer = SDL_GetTicks();
-    world->str = malloc(sizeof(char)*100); // Allocation de la mémoire pour le string temps
+    world->temps_str = malloc(sizeof(char)*100); // Allocation de la mémoire pour le string temps
 
 
     world->coins_str = malloc(sizeof(char)*100); // Allocation de la mémoire pour le string coins
@@ -63,48 +66,19 @@ void init_data(world_t * world){
 
     world->mouseX = 0;
     world->mouseY = 0;
-    world->isMenu = false; 
     world->money = 0;
     world->parallax = 0;
     world->invicibility = false;
 }
 
-void update_data(world_t *world){
-    if (!world->isMenu){
-        world->ligneArriver->y += (int)world->speed_h;
-        world->soleil->y += (int)world->speed_h;
 
-        world->vaisseauMini->dy -= world->speed_h/(MAX_LINES*METEORITE_REAL_SIZE+700)*400;
-        world->vaisseauMini->y = (int)world->vaisseauMini->dy;
-
-        outBorder(world);
-
-        world->parallax += (int)world->speed_h;
-        update_walls(world);
-        world->money2 = world->money;
-        if (!world->invicibility){
-            for(int i = 0; i < world->nb_murs; i++){
-                collide(world->vaisseau, world->murs[i], world);
-            }
-        }
-        
-
-        if (timer_update_s(world) != 0){
-            world->str[0] = '\0';
-            world->str = strcats(world->str, 3, "temps: ",int_to_str((int)world->timer/1000), "s");
-        }
-        collide(world->vaisseau, world->ligneArriver, world); // Collision avec la ligne d'arriver   
-        allEvents(world);
-        world->timer = SDL_GetTicks(); 
-    }
-}
 
 void outBorder(world_t *world){
     if (isOverScreen(world->vaisseau)){
-                if (world->vaisseau->x < 0) world->vaisseau->x = 0;
-                if (world->vaisseau->x + world->vaisseau->w > SCREEN_WIDTH) world->vaisseau->x = SCREEN_WIDTH - world->vaisseau->w;
-                if (world->vaisseau->y < 0) world->vaisseau->y = 0;
-                if (world->vaisseau->y + world->vaisseau->h > SCREEN_HEIGHT) world->vaisseau->y = SCREEN_HEIGHT - world->vaisseau->h;
+        if (world->vaisseau->x < 0) world->vaisseau->x = 0;
+        if (world->vaisseau->x + world->vaisseau->w > SCREEN_WIDTH) world->vaisseau->x = SCREEN_WIDTH - world->vaisseau->w;
+        if (world->vaisseau->y < 0) world->vaisseau->y = 0;
+        if (world->vaisseau->y + world->vaisseau->h > SCREEN_HEIGHT) world->vaisseau->y = SCREEN_HEIGHT - world->vaisseau->h;
     }
 }
 
@@ -113,8 +87,8 @@ int is_game_over(world_t *world){
 }
 
 int timer_update_s(world_t *world){
-    if (world->timer%1000 <=  110|| world->timer%1000 >= 985){
-        return world->timer%1000;
+    if ((world->timer)%1000 <=  110|| (world->timer)%1000 >= 985){
+        return (world->timer)%1000;
     }
     return 0;
 }
@@ -216,7 +190,7 @@ void clean_data(world_t *world){
     free(world->vaisseau);
     free(world->ligneArriver);
     free(world->murs);
-    free(world->str);
+    free(world->temps_str);
     free(world->vaisseauMini);
     free(world->soleilBarre);
     free(world->soleil);
@@ -224,6 +198,10 @@ void clean_data(world_t *world){
     free(world->coins);
     free(world->coins_str);
     free(world->air);
+    free(world->play);
+    free(world->exit);
+    free(world->magasin);
+    free(world->sound);
 
     printf("clean_data");   
 }
