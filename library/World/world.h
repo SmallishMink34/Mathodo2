@@ -44,6 +44,12 @@ struct world_s{
     btn_t *magasin;
     btn_t *sound;
     
+    sprite_t *BarreProgression;
+    sprite_t *vaisseauMini;
+    sprite_t *soleilBarre;
+    sprite_t *soleil;
+    sprite_t *air;
+    sprite_t *coins;
     int nb_murs; // Nombre de météorites
     int nb_lines_murs; // Nombre de lignes de météorites
     sprite_t *ligneArriver;
@@ -52,12 +58,20 @@ struct world_s{
     unsigned int startTimer; /*!< Timer de départ */
     unsigned int timer; /*!< Timer de jeu */
     char * str; // String affichant le temps sur le jeu
+    char * coins_str;
+
     double angle; // Angle de rotation de la map
     int isFlipping; // Indique si l'on est en train de faire une rotation de l'écran et dans quelle sens (0 : non droite, 1 : vers la droite, -1 : vers la gauche, -2 : non gauche)
     int isMenu;
 
     int mouseX;
     int mouseY;
+    bool isMenu;
+    int money;
+    int money2;
+
+    int parallax;
+    bool invicibility;
 };
 typedef struct world_s world_t;
 
@@ -74,6 +88,20 @@ void update_data(world_t *world);
 
 int is_game_over(world_t *world);
 
+/**
+ * @brief Detecte si le vaisseau va en dehors de l'écran
+ * 
+ * @param world 
+ */
+void outBorder(world_t *world);
+
+/**
+ * @brief Actualise le timer de jeu
+ * 
+ * @param world 
+ * @return int 
+ */
+int timer_update_s(world_t *world);
 
 /**
  * \brief La fonction initialise les données du monde du jeu
@@ -104,7 +132,7 @@ void flipScreen(world_t *world);
  * \param world Le monde
  * \param make_disappear Indique si l'on doit faire disparaître les sprites en cas de collision 
  */
-void collide(sprite_t *sp1, sprite_t *sp2, world_t *world, int make_disappear);
+void collide(sprite_t *sp1, sprite_t *sp2, world_t *world);
 
 
 /**
@@ -120,6 +148,8 @@ void init_walls(world_t *world);
  * \param world 
  */
 void update_walls(world_t *world);
+
+void remove_wall(world_t *world, int index);
 
 /**
  * \brief La fonction qui execute toutes les actions du jeu

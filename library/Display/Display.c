@@ -4,26 +4,37 @@
 #include <math.h>
 
 void init_ressource(SDL_Renderer *renderer, ressources_t *textures){
-    textures->background = load_image( "ressources/Elements/background2.bmp",renderer);
     textures->bmenu = load_image( "ressources/image-menu.bmp",renderer);
     textures->ship = load_image( "ressources/spaceship.bmp",renderer);
+    textures->background = load_image( "ressources/Elements/backgrounds/1.png",renderer);
+    textures->background2 = load_image( "ressources/Elements/backgrounds/3.png",renderer);
+    textures->background3 = load_image( "ressources/Elements/backgrounds/2.png",renderer);
+    textures->ship = load_image( "ressources/Elements/Ship_1.png",renderer);
     
     textures->finishLine = load_image( "ressources/finish_line.bmp",renderer);
     textures->font = load_font("ressources/font/arial.ttf", 14);
     textures->color = (SDL_Color){255, 255, 255, 255};
 
+    textures->BarreProgression = load_image( "ressources/Elements/BarreProgression.png",renderer);
+    textures->vaisseauMini = textures->ship;
+
+    textures->soleilBarre = load_image( "ressources/Elements/soleil.png",renderer);
+    textures->soleil = load_image( "ressources/Elements/soleil.png",renderer);
+    textures->nb_init = 9;
     init_ressource_element(renderer, textures);
+    
 }
 
 void init_ressource_element(SDL_Renderer *renderer, ressources_t *textures){
     textures->meteorite = load_image( "ressources/meteorite.bmp",renderer);
     textures->e_rotate = load_image("ressources/Elements/reverse.bmp", renderer);
+    textures->coins = load_image("ressources/Elements/coin.png", renderer);
+    textures->nb_init += 3;
 }
 
-void apply_background(SDL_Renderer *renderer, SDL_Texture *texture, world_t *world){
+void apply_background(SDL_Renderer *renderer, SDL_Texture *texture, world_t *world, int parallax){
     if(texture != NULL){
-        //printf("%f %f\n", (SCREEN_WIDTH/2+(0-SCREEN_WIDTH/2)*cos(angle)-(0-SCREEN_HEIGHT/2)*sin(angle)), (SCREEN_HEIGHT/2+(0-SCREEN_WIDTH/2)*sin(angle)+(0-SCREEN_HEIGHT/2)*cos(angle)));
-      apply_texture(texture, renderer, 0, 0, world->angle*180/M_PI);
+        apply_texture(texture, renderer, 0, -1800+world->parallax/parallax, world->angle*180/M_PI);
     }
 }
 
@@ -40,6 +51,19 @@ void apply_sprite(SDL_Renderer * renderer, SDL_Texture *texture, sprite_t *sprit
     }
 }
 
+void apply_sprite_fixed(SDL_Renderer * renderer, SDL_Texture *texture, sprite_t *sprite, world_t *world){
+    if(texture != NULL){
+        SDL_Rect rect;
+        rect.x = sprite->x;
+        rect.y = sprite->y;
+
+        rect.w = sprite->w;
+        rect.h = sprite->h;
+
+        SDL_RenderCopyEx(renderer, texture, NULL, &rect, world->angle*180/M_PI, NULL, SDL_FLIP_NONE);
+    }
+}
+
 void apply_wall(SDL_Renderer * renderer, SDL_Texture *texture, int x, int y,world_t *world){
     if(texture != NULL){
         SDL_Rect rect;
@@ -47,7 +71,6 @@ void apply_wall(SDL_Renderer * renderer, SDL_Texture *texture, int x, int y,worl
         rect.y = SCREEN_HEIGHT/2 + (x - SCREEN_WIDTH/2) * sin(world->angle) + (y - SCREEN_HEIGHT/2) * cos(world->angle);
         rect.w = METEORITE_SIZE;
         rect.h = METEORITE_SIZE;
-        
         if (SDL_RenderCopyEx(renderer, texture, NULL, &rect, world->angle*180/M_PI, NULL, SDL_FLIP_NONE) != 0){
             printf("ok\n");
         }
@@ -62,18 +85,22 @@ void apply_walls(SDL_Renderer * renderer, SDL_Texture *texture, world_t *world, 
                     apply_wall(renderer, res->meteorite, world->murs[i]->x+i3*METEORITE_SIZE, world->murs[i]->y+i2*METEORITE_SIZE, world);
                 }else if(strcmp(world->murs[i]->id, "2") == 0){
                     apply_wall(renderer, res->e_rotate, world->murs[i]->x+i3*METEORITE_SIZE, world->murs[i]->y+i2*METEORITE_SIZE, world);
+                }else if(strcmp(world->murs[i]->id, "3") == 0){
+                    apply_wall(renderer, res->coins, world->murs[i]->x+i3*METEORITE_SIZE, world->murs[i]->y+i2*METEORITE_SIZE, world);
                 }
             }
         }
     }
 }
 
-
 void refresh_graphics(SDL_Renderer *renderer, world_t *world,ressources_t *textures){
     //on vide le renderer
     clear_renderer(renderer);
     
-    
+    //application des textures dans le renderer
+    apply_background(renderer, textures->background, world, 7);
+    apply_background(renderer, textures->background2, world, 3);
+    apply_background(renderer, textures->background3, world, 9);
 
     if (world->isMenu == 0){
         ingame(renderer,world,textures);
@@ -88,24 +115,25 @@ void inmenu(SDL_Renderer *renderer, world_t *world,ressources_t *textures){
     apply_background(renderer, textures->bmenu, world);
 }
 void ingame(SDL_Renderer *renderer, world_t *world,ressources_t *textures){
-    apply_background(renderer, textures->background, world);//application des textures dans le renderer
+    if (world->ismenu == 0){
+        apply_background(renderer, textures->background, world);//application des textures dans le renderer
         apply_sprite(renderer, textures->ship, world->vaisseau, world);
         apply_sprite(renderer, textures->finishLine, world->ligneArriver, world);
         apply_walls(renderer, textures->meteorite, world, textures);
-
-        if (timer_update_s(world) != 0){
-            world->str[0] = '\0';
-            world->str = strcats(world->str, 3, "temps: ",int_to_str((int)world->timer/1000), "s");
-        }
+        apply_sprite(renderer, textures->soleil, world->soleil, world);
         apply_text(renderer, 10, 10, 100, 33, world->str, textures->font, textures->color); 
-
-}
-
-int timer_update_s(world_t *world){
-    if (world->timer%1000 <=  110|| world->timer%1000 >= 985){
-        return world->timer%1000;
+        apply_text(renderer, SCREEN_WIDTH-(60+10*number_of_numbers(world->money)), 10, 15*number_of_numbers(world->money), 30, world->coins_str, textures->font, textures->color);
+        apply_sprite_fixed(renderer, textures->BarreProgression, world->BarreProgression, world);
+        apply_sprite_fixed(renderer, textures->vaisseauMini, world->vaisseauMini, world);
+        apply_sprite_fixed(renderer, textures->soleilBarre, world->soleilBarre, world);
+        apply_sprite_fixed(renderer, textures->coins, world->coins, world);
+        
+    }else{
+        apply_text(renderer, 10, 10, 100, 33, "Menu", textures->font, textures->color);
+        printf("aaa");
     }
-    return 0;
+    
+    update_screen(renderer);
 }
 
 void clean(SDL_Window *window, SDL_Renderer * renderer, ressources_t *textures, world_t * world){

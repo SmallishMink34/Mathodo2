@@ -9,11 +9,10 @@
  * 
  */
 #include <stdarg.h>
-
+#include "../../constante.c"
 #ifndef Utility_h
 #define Utility_h
-#define MAX_LINES 500
-#define MAX_LENGTH 28
+
 
 /**
  * \brief Concatène plusieurs chaines de caractères
@@ -43,4 +42,5 @@ char * int_to_str(int n);
 
 char ** lirefile(char *filename, int *num_lines);
 
+int number_of_numbers(int n);
 #endif

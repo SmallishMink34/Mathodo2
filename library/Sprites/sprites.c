@@ -13,15 +13,16 @@ void print_sprite(sprite_t *sprite){
 }
 
 
-sprite_t *init_sprite(sprite_t *sprite, int x, int y, int w, int h, char id){
+sprite_t *init_sprite(sprite_t *sprite, int x, int y, int w, int h, char id, int indice){
     sprite = malloc(sizeof(sprite_t));
     sprite->x = x;
     sprite->y = y;
     sprite->w = w;
     sprite->h = h;
     sprite->id = malloc(sizeof(char) * 10);
+    sprite->dy = 0.0;
     strcpy(sprite->id, &id);
-
+    sprite->indice = indice;
     return sprite;
 }
 

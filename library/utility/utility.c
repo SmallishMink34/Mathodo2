@@ -42,3 +42,12 @@ char **lirefile(char *filename, int *num_lines) {
     fclose(file);
     return lines;
 }
+
+int number_of_numbers(int n){
+    int count = 0;
+    while (n != 0){
+        n /= 10;
+        count++;
+    }
+    return count;
+}

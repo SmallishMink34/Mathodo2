@@ -9,7 +9,7 @@
 #include "sdl2-light.h"
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <SDL2/SDL_image.h>
 
 
 int init_sdl(SDL_Window **window, SDL_Renderer **renderer, int width, int height)
@@ -37,8 +37,11 @@ SDL_Texture *load_image(const char path[], SDL_Renderer *renderer)
     tmp = SDL_LoadBMP(path);
     if(NULL == tmp)
     {
-        fprintf(stderr, "Erreur pendant chargement image BMP: %s", SDL_GetError());
-        return NULL;
+        tmp = IMG_Load(path);
+        if (NULL == tmp){
+            fprintf(stderr, "Erreur pendant chargement image BMP: %s", SDL_GetError());
+            return NULL;
+        }
     }
     SDL_SetColorKey(tmp, SDL_TRUE, SDL_MapRGB(tmp->format, 255, 0, 255));
     texture = SDL_CreateTextureFromSurface(renderer, tmp);

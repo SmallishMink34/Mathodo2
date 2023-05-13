@@ -22,6 +22,7 @@
 
 #define METEORITE_SIZE 32
 
+#define METEORITE_REAL_SIZE 34
 
 /**
  * \brief Hauteur de la ligne d'arrivée
@@ -43,3 +44,15 @@
 */
 
 #define INITIAL_SPEED 2
+
+/**
+ * \brief Nombre de lignes de météorites
+ * 
+ */
+#define MAX_LINES 500
+
+/**
+ * \brief Nombre maximum de météorite par ligne
+ * 
+ */
+#define MAX_LENGTH 28
