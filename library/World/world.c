@@ -185,6 +185,8 @@ void allEvents(world_t *world){
     }
 }
 
+
+
 void clean_data(world_t *world){
     /* utile uniquement si vous avez fait de l'allocation dynamique (malloc); la fonction ici doit permettre de libérer la mémoire (free) */
     free(world->vaisseau);

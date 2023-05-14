@@ -35,11 +35,10 @@ void init_ressource_element(SDL_Renderer *renderer, ressources_t *textures){
 void apply_background_parralax(SDL_Renderer *renderer, SDL_Texture *texture, world_t *world, int parallax){
     if(texture != NULL){
         apply_texture(texture, renderer, 0, (int)(-1800+(world->parallax/parallax)), world->angle*180/M_PI);
-
     }
 }
 
-void apply_background(SDL_Renderer *renderer, SDL_Texture *texture, world_t *world, int parallax){
+void apply_background(SDL_Renderer *renderer, SDL_Texture *texture, world_t *world){
     if(texture != NULL){
         apply_texture(texture, renderer, 0, 0, world->angle*180/M_PI);
     }
@@ -115,7 +114,7 @@ void refresh_graphics(SDL_Renderer *renderer, world_t *world,ressources_t *textu
     
 }
 void inmenu(SDL_Renderer *renderer, world_t *world,ressources_t *textures){
-    apply_background(renderer, textures->bmenu, world, 0);
+    apply_background(renderer, textures->bmenu, world);
 }
 void ingame(SDL_Renderer *renderer, world_t *world,ressources_t *textures){
     //application des textures dans le renderer

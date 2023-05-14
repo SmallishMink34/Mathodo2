@@ -81,6 +81,14 @@ void init_ressource_element(SDL_Renderer *renderer, ressources_t *textures);
 void apply_background_parralax(SDL_Renderer *renderer, SDL_Texture *texture, world_t *world, int parallax);
 
 /**
+ * @brief La fonction qui applique la texture \a texture sur le renderer \a renderer en fonction des données du monde \a world
+ * 
+ * @param renderer 
+ * @param texture 
+ * @param world 
+ */
+void apply_background(SDL_Renderer *renderer, SDL_Texture *texture, world_t *world);
+/**
  * \brief La fonction qui applique la texture \a texture sur le renderer \a renderer en fonction des données du sprite \a sprite (avec rotation)
  * 
  * \param texture

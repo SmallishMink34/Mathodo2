@@ -75,6 +75,13 @@ struct world_s{
 typedef struct world_s world_t;
 
 /**
+ * \brief La fonction initialise les données du monde du jeu
+ * \param world les données du monde
+ */
+
+void init_data(world_t * world);
+
+/**
  * \brief La fonction met à jour les données en tenant compte de la physique du monde
  * \param les données du monde
  */
@@ -101,13 +108,6 @@ void outBorder(world_t *world);
  * @return int 
  */
 int timer_update_s(world_t *world);
-
-/**
- * \brief La fonction initialise les données du monde du jeu
- * \param world les données du monde
- */
-
-void init_data(world_t * world);
 
 /**
  * \brief La fonction libère les données du monde
@@ -148,6 +148,12 @@ void init_walls(world_t *world);
  */
 void update_walls(world_t *world);
 
+/**
+ * @brief La fonction qui enlève un mur
+ * 
+ * @param world 
+ * @param index 
+ */
 void remove_wall(world_t *world, int index);
 
 /**
@@ -157,5 +163,10 @@ void remove_wall(world_t *world, int index);
  */
 void allEvents(world_t *world);
 
+/**
+ * @brief La fonction qui initialise le menu
+ * 
+ * @param world 
+ */
 void InitMenu(world_t *world);
 #endif

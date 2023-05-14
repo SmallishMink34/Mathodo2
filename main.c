@@ -32,8 +32,8 @@ void handle_events(SDL_Event *event,world_t *world){
             world->vaisseau->x += MOVING_STEP;
         }
     }
-    SDL_GetMouseState(&world->mouseX, &world->mouseY);
 
+    SDL_GetMouseState(&world->mouseX, &world->mouseY);
 
     while( SDL_PollEvent( event ) ) {
         
