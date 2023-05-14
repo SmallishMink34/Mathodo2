@@ -155,7 +155,7 @@ int main( int argc, char* args[] ){
 
     //initialisation du jeu
     init(&window,&renderer,&textures,&world);
-    
+     
     /*--------------------------Display--------------------------*/
     compteur_test += test_init_ressource(renderer, &textures);
     compteur_test += test_apply_background_parralax(renderer, textures.background, &world, 1);
