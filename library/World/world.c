@@ -2,7 +2,7 @@
 #include "../utility/utility.h"
 
 void update_data(world_t *world){
-    if (world->isMenu==0){
+    if (world->gamestate==0){
         world->ligneArriver->y += (int)world->speed_h;
         world->soleil->y += (int)world->speed_h;
 
@@ -27,8 +27,10 @@ void update_data(world_t *world){
         }
         allEvents(world);
         world->timer = SDL_GetTicks() - world->startTimer;; 
-    }else if(world->isMenu == 1){
+    }else if(world->gamestate == 1){
         world->startTimer = SDL_GetTicks();
+    }else if(world->gamestate == 2){
+        printf("%d\n", world->money);
     }
 }
 
@@ -38,8 +40,14 @@ void init_data(world_t * world){
     world->speed_h = (float)INITIAL_SPEED;
     init_walls(world);
     world->ligneArriver = init_sprite(world->ligneArriver, 0, -world->nb_lines_murs*METEORITE_SIZE-30 , SCREEN_WIDTH, FINISH_LINE_HEIGHT, 'z', 0);
-    InitMenu(world);
-    print_sprite(world->vaisseau);
+
+    world->money = 2000; // Initialisation de l'argent ici car necessaire dans init_menu
+
+    init_menu(world);
+    
+    init_shop(world);
+    
+    printf("test\n");
     // Initialisation du vaisseau
     world->vaisseau = init_sprite(world->vaisseau, SCREEN_WIDTH/2 - SHIP_SIZE/2, SCREEN_HEIGHT - SHIP_SIZE-15, SHIP_SIZE, SHIP_SIZE, '0', 0);
     world->ligneArriver = init_sprite(world->ligneArriver, 0, -world->nb_lines_murs*METEORITE_REAL_SIZE-30 , SCREEN_WIDTH, FINISH_LINE_HEIGHT, 'z', 0);
@@ -54,23 +62,24 @@ void init_data(world_t * world){
     world->vaisseauMini->dy = SCREEN_HEIGHT - (110);
     world->timer = SDL_GetTicks();
     world->temps_str = malloc(sizeof(char)*100); // Allocation de la mémoire pour le string temps
-
-
     world->coins_str = malloc(sizeof(char)*100); // Allocation de la mémoire pour le string coins
     world->coins_str[0] = '\0';
     world->coins_str = strcats(world->coins_str, 1, "0");
 
+
     world->angle = 0.0;
     world->isFlipping = 0;
-    world->isMenu = 1;
+    world->gamestate = 1;
 
     world->mouseX = 0;
     world->mouseY = 0;
-    world->money = 0;
+    
     world->parallax = 0;
     world->invicibility = false;
-}
 
+
+    print_sprite(world->vaisseau);
+}
 
 
 void outBorder(world_t *world){
@@ -93,13 +102,35 @@ int timer_update_s(world_t *world){
     return 0;
 }
 
-void InitMenu(world_t * world){
+void init_menu(world_t * world){
     world->play = init_btn(203,129, 218, 97);
     world->exit = init_btn(202,294, 218, 97);
     world->magasin = init_btn(436, 217, 218, 97);
     world->sound = init_btn(0, 0, 100, 100);
+
+    world->coin_menu_str = malloc(sizeof(char)*100); // Allocation de la mémoire pour le string coins
+    world->coin_menu_str[0] = '\0';
+    world->coin_menu_str = strcats(world->coin_menu_str, 1, int_to_str(world->money));
 }
 
+void init_shop(world_t * world){
+    world->ship1 = init_btn(74,145, 191, 139);
+    world->ship2 = init_btn(287,143, 191, 139);
+    world->ship3 = init_btn(491,138, 191, 139);
+    world->ship4 = init_btn(290,308, 191, 139);
+
+    world->Spr_ship = malloc(sizeof(sprite_t*)*4);
+    world->Spr_ship[0] = init_sprite(world->Spr_ship[0], 74,145, 191, 139, 'x', 0);
+    world->Spr_ship[1] = init_sprite(world->Spr_ship[1], 287,143, 191, 139, 'x', 0);
+    world->Spr_ship[2] = init_sprite(world->Spr_ship[2], 491,138, 191, 139, 'x', 0);
+    world->Spr_ship[3] = init_sprite(world->Spr_ship[3], 290,308, 191, 139, 'x', 0);
+    
+    world->shopPrice = malloc(sizeof(int)*4);
+    world->shopPrice[0] = 200;
+    world->shopPrice[1] = 500;
+    world->shopPrice[2] = 1000;
+    world->shopPrice[3] = 2000;
+}
 
 void collide(sprite_t *sp1, sprite_t *sp2, world_t *world){
     if (sprites_collide(sp1, sp2)){
@@ -204,6 +235,13 @@ void clean_data(world_t *world){
     free(world->exit);
     free(world->magasin);
     free(world->sound);
+    free(world->ship1);
+    free(world->ship2);
+    free(world->ship3);
+    free(world->ship4);
+    free(world->Spr_ship);
+    free(world->shopPrice);
+    free(world->coin_menu_str);
 
     printf("clean_data");   
 }

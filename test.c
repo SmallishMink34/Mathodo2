@@ -136,7 +136,7 @@ int test_allEvents(world_t *world){
 }
 
 int test_InitMenu(world_t *world){
-    InitMenu(world);
+    init_menu(world);
     return 1; // Pas d'erreur
 }
 

@@ -5,6 +5,7 @@
 
 void init_ressource(SDL_Renderer *renderer, ressources_t *textures){
     textures->bmenu = load_image( "ressources/image-menu.bmp",renderer);
+    textures->bshop = load_image( "ressources/Elements/shop.png",renderer);
     textures->ship = load_image( "ressources/spaceship.bmp",renderer);
     textures->background = load_image( "ressources/Elements/backgrounds/1.png",renderer);
     textures->background2 = load_image( "ressources/Elements/backgrounds/3.png",renderer);
@@ -20,6 +21,11 @@ void init_ressource(SDL_Renderer *renderer, ressources_t *textures){
 
     textures->soleilBarre = load_image( "ressources/Elements/soleil.png",renderer);
     textures->soleil = load_image( "ressources/Elements/soleil.png",renderer);
+
+    textures->buy = load_image( "ressources/Elements/shop/buy.png",renderer);
+    textures->nomoney = load_image( "ressources/Elements/shop/nomoney.png",renderer);
+    textures->sell = load_image( "ressources/Elements/shop/sell.png",renderer);
+
     textures->nb_init = 9;
     init_ressource_element(renderer, textures);
     
@@ -102,12 +108,12 @@ void apply_walls(SDL_Renderer * renderer, SDL_Texture *texture, world_t *world, 
 void refresh_graphics(SDL_Renderer *renderer, world_t *world,ressources_t *textures){
     //on vide le renderer
     clear_renderer(renderer);
-    if (world->isMenu == 0){
-        
+    if (world->gamestate == 0){
         ingame(renderer,world,textures);
-    }else if(world -> isMenu==1){
-        
+    }else if(world ->gamestate==1){
         inmenu(renderer,world,textures);
+    }else if(world ->gamestate==2){
+        inshop(renderer,world,textures);
     }
     
     update_screen(renderer);
@@ -115,7 +121,30 @@ void refresh_graphics(SDL_Renderer *renderer, world_t *world,ressources_t *textu
 }
 void inmenu(SDL_Renderer *renderer, world_t *world,ressources_t *textures){
     apply_background(renderer, textures->bmenu, world);
+    printf("%d\n", number_of_numbers(world->money));
+    apply_text(renderer, (SCREEN_WIDTH-90)-(25*number_of_numbers(world->money)), 20, 25*number_of_numbers(world->money), 50, world->coin_menu_str, textures->font, textures->color);
 }
+
+void inshop(SDL_Renderer *renderer, world_t *world, ressources_t *textures){
+    apply_background(renderer, textures->bshop, world);
+    
+    apply_text(renderer, 150, 150, 50, 25, "200$", textures->font, textures->color);
+    apply_text(renderer, 360, 145, 50, 25, "500$", textures->font, textures->color);
+    apply_text(renderer, 560, 140, 50, 25, "1000$", textures->font, textures->color);
+    apply_text(renderer, 370, 315, 50, 25, "2000$", textures->font, textures->color);
+    
+    for (int i = 0; i<4; i++){
+        if (world->shopPrice[i] <= world->money){
+            apply_sprite_fixed(renderer, textures->buy, world->Spr_ship[i], world);
+        }else{
+            apply_sprite_fixed(renderer, textures->nomoney, world->Spr_ship[i], world);
+        }
+    }
+
+    apply_text(renderer, (SCREEN_WIDTH-90)-(25*number_of_numbers(world->money)), 20, 25*number_of_numbers(world->money), 50, world->coin_menu_str, textures->font, textures->color);
+
+}
+
 void ingame(SDL_Renderer *renderer, world_t *world,ressources_t *textures){
     //application des textures dans le renderer
 

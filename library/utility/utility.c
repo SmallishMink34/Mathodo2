@@ -44,10 +44,18 @@ char **lirefile(char *filename, int *num_lines) {
 }
 
 int number_of_numbers(int n){
+    if (n == 0){
+        return 1;
+    }
     int count = 0;
     while (n != 0){
         n /= 10;
         count++;
     }
     return count;
+}
+
+void modify_str(char *str, char *str2){
+    str[0] = '\0';
+    strcat(str, str2);
 }

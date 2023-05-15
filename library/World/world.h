@@ -44,12 +44,20 @@ struct world_s{
     btn_t *magasin;
     btn_t *sound;
     
+    btn_t *ship1;
+    btn_t *ship2;
+    btn_t *ship3;
+    btn_t *ship4;
+
     sprite_t *BarreProgression;
     sprite_t *vaisseauMini;
     sprite_t *soleilBarre;
     sprite_t *soleil;
     sprite_t *air;
     sprite_t *coins;
+
+    sprite_t **Spr_ship;
+    int *shopPrice;
     int nb_murs; // Nombre de météorites
     int nb_lines_murs; // Nombre de lignes de météorites
     sprite_t *ligneArriver;
@@ -59,10 +67,12 @@ struct world_s{
     unsigned int timer; /*!< Timer de jeu */
     char * temps_str; // String affichant le temps sur le jeu
     char * coins_str;
+    char * coin_menu_str;
+
 
     double angle; // Angle de rotation de la map
     int isFlipping; // Indique si l'on est en train de faire une rotation de l'écran et dans quelle sens (0 : non droite, 1 : vers la droite, -1 : vers la gauche, -2 : non gauche)
-    int isMenu;
+    int gamestate;
 
     int mouseX;
     int mouseY;
@@ -71,6 +81,8 @@ struct world_s{
 
     int parallax;
     bool invicibility;
+
+    
 };
 typedef struct world_s world_t;
 
@@ -168,5 +180,12 @@ void allEvents(world_t *world);
  * 
  * @param world 
  */
-void InitMenu(world_t *world);
+void init_menu(world_t *world);
+
+/**
+ * @brief La fonction qui initialise le shop
+ * 
+ * @param world 
+ */
+void init_shop(world_t * world);
 #endif

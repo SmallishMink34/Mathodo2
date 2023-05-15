@@ -35,6 +35,7 @@
 struct ressources_s{
     SDL_Texture* background; /*!< Texture liée à l'image du fond de l'écran. */
     SDL_Texture* bmenu;/*!< Texture liée à l'image du fond du menu. */
+    SDL_Texture* bshop; /*!< Texture liée à l'image du fond du gameover. */
     SDL_Texture* background2; /*!< Texture liée à l'image du fond de l'écran. (effet parallax) */
     SDL_Texture* background3; /*!< Texture liée à l'image du fond de l'écran. (effet parallax) */
     SDL_Texture* ship; /*!< Texture liée à l'image du vaisseau. */
@@ -48,6 +49,10 @@ struct ressources_s{
 
     SDL_Texture* soleilBarre; /*!< Texture liée à l'image du soleil. */
     SDL_Texture* soleil; /*!< Texture liée à l'image du soleil. */
+
+    SDL_Texture* buy; /*!< Texture liée à l'image du bouton buy. */
+    SDL_Texture* nomoney; /*!< Texture liée à l'image du bouton nomoney. */
+    SDL_Texture* sell; /*!< Texture liée à l'image du bouton sell. */
 
     TTF_Font *font; // Font
     SDL_Color color; // Color
@@ -149,8 +154,30 @@ void clean_textures(ressources_t *textures);
 */
 void clean(SDL_Window *window, SDL_Renderer * renderer, ressources_t *textures, world_t * world);
 
+/**
+ * @brief La fonction qui affiche le jeu (en jeu)
+ * 
+ * @param renderer 
+ * @param world 
+ * @param textures 
+ */
 void ingame(SDL_Renderer *renderer, world_t *world,ressources_t *textures);
 
+/**
+ * @brief La fonction qui affiche le jeu (en menu)
+ * 
+ * @param renderer 
+ * @param world 
+ * @param textures 
+ */
 void inmenu(SDL_Renderer *renderer, world_t *world,ressources_t *textures);
 
+/**
+ * @brief La fonction qui affiche le jeu (en magasin)
+ * 
+ * @param renderer 
+ * @param world 
+ * @param textures
+ */
+void inshop(SDL_Renderer *renderer, world_t *world, ressources_t *textures);
 #endif

@@ -24,7 +24,7 @@
 void handle_events(SDL_Event *event,world_t *world){
     const Uint8 *keystates = SDL_GetKeyboardState(NULL);
 
-    if (!world->isMenu){
+    if (world->gamestate == 0){
         if (keystates[SDL_SCANCODE_A]){
             world->vaisseau->x -= MOVING_STEP; 
         }
@@ -46,7 +46,7 @@ void handle_events(SDL_Event *event,world_t *world){
          //si une touche est appuyée
          if(event->type == SDL_KEYDOWN){ 
              //si la touche appuyée est 'D'
-            if (!world->isMenu){
+            if (!world->gamestate){
                 switch (event->key.keysym.sym){
                     case SDLK_z:
                         world->speed_h = 4;
@@ -65,21 +65,44 @@ void handle_events(SDL_Event *event,world_t *world){
             //  print_sprite(world->vaisseau);
         }
         if (event->type == SDL_MOUSEBUTTONDOWN){
-            printf("aaa");
-            if (world->isMenu){
+            if (world->gamestate == 1){
                 if (event->button.button == SDL_BUTTON_LEFT){
                     printf("mouse(%d, %d) world rect (%d %d %d %d)\n", world->mouseX, world->mouseY, world->play->rect.x,world->play->rect.y,world->play->rect.w,world->play->rect.h );
                     if (collidePoint(world->play, world->mouseX, world->mouseY)){
                         printf("tesy");
-                        world->isMenu = false;
+                        world->gamestate = 0;
                     }
                     if (collidePoint(world->magasin, world->mouseX, world->mouseY)){
                         printf("tesy");
-                        world->isMenu = false;
+                        world->gamestate = 2;
                     }
                     if (collidePoint(world->exit, world->mouseX, world->mouseY)){
                         printf("tesy");
                         world->gameover = true;
+                    }
+                }
+            }else if(world->gamestate == 2){
+                if (event->button.button == SDL_BUTTON_LEFT){
+                    if (collidePoint(world->ship1, world->mouseX, world->mouseY)){
+                        printf("ship1");
+                        world->money -= world->shopPrice[0];
+                        modify_str(world->coins_str, int_to_str(world->money));
+                        printf("%s\n", world->coins_str);
+                    }
+                    if (collidePoint(world->ship2, world->mouseX, world->mouseY)){
+                        printf("ship2");
+                        world->money -= world->shopPrice[1];
+                        modify_str(world->coins_str, int_to_str(world->money));
+                    }
+                    if (collidePoint(world->ship3, world->mouseX, world->mouseY)){
+                        printf("ship3");
+                        world->money -= world->shopPrice[2];
+                        modify_str(world->coins_str, int_to_str(world->money));
+                    }
+                    if (collidePoint(world->ship4, world->mouseX, world->mouseY)){
+                        printf("ship4");
+                        world->money -= world->shopPrice[3];
+                        modify_str(world->coins_str, int_to_str(world->money));
                     }
                 }
             }
@@ -103,9 +126,11 @@ void handle_events(SDL_Event *event,world_t *world){
 
 void init(SDL_Window **window, SDL_Renderer ** renderer, ressources_t *textures, world_t * world){
     init_sdl(window,renderer,SCREEN_WIDTH, SCREEN_HEIGHT);
+     
     init_data(world);
     // Initialisation du ttf
     init_ttf();
+   
     init_ressource(*renderer,textures);
     
 }

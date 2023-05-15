@@ -24,6 +24,7 @@
  */
 char * strcats(char* dest, int num_args, ...);
 
+void modify_str(char *str, char *str2);
 /**
  * \brief Convertit un entier en chaine de caractère
  * 
@@ -42,5 +43,11 @@ char * int_to_str(int n);
 
 char ** lirefile(char *filename, int *num_lines);
 
+/**
+ * @brief Retourne le nombre de chiffres d'un entier
+ * 
+ * @param n 
+ * @return int 
+ */
 int number_of_numbers(int n);
 #endif
