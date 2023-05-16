@@ -104,6 +104,10 @@ void handle_events(SDL_Event *event,world_t *world){
                         world->money -= world->shopPrice[3];
                         modify_str(world->coins_str, int_to_str(world->money));
                     }
+                    if (collidePoint(world->exit_shp, world->mouseX, world->mouseY)){
+                        printf("exit");
+                        world->gamestate=1;
+                    }
                 }
             }
         }

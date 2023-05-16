@@ -6,11 +6,11 @@
 void init_ressource(SDL_Renderer *renderer, ressources_t *textures){
     textures->bmenu = load_image( "ressources/image-menu.bmp",renderer);
     textures->bshop = load_image( "ressources/Elements/shop.png",renderer);
-    textures->ship = load_image( "ressources/spaceship.bmp",renderer);
     textures->background = load_image( "ressources/Elements/backgrounds/1.png",renderer);
     textures->background2 = load_image( "ressources/Elements/backgrounds/3.png",renderer);
     textures->background3 = load_image( "ressources/Elements/backgrounds/2.png",renderer);
     textures->ship = load_image( "ressources/Elements/Ship_1.png",renderer);
+    textures->exit_shp = load_image( "ressources/exit.png",renderer);
     
     textures->finishLine = load_image( "ressources/finish_line.bmp",renderer);
     textures->font = load_font("ressources/font/arial.ttf", 14);
@@ -143,6 +143,7 @@ void inshop(SDL_Renderer *renderer, world_t *world, ressources_t *textures){
 
     apply_text(renderer, (SCREEN_WIDTH-90)-(25*number_of_numbers(world->money)), 20, 25*number_of_numbers(world->money), 50, world->coin_menu_str, textures->font, textures->color);
 
+    apply_sprite(renderer, textures->exit_shp, world->exit_shp , world);
 }
 
 void ingame(SDL_Renderer *renderer, world_t *world,ressources_t *textures){

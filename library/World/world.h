@@ -48,6 +48,7 @@ struct world_s{
     btn_t *ship2;
     btn_t *ship3;
     btn_t *ship4;
+    btn_t *exit_shp;
 
     sprite_t *BarreProgression;
     sprite_t *vaisseauMini;
@@ -55,6 +56,7 @@ struct world_s{
     sprite_t *soleil;
     sprite_t *air;
     sprite_t *coins;
+    sprite_t *exit_shop;
 
     sprite_t **Spr_ship;
     int *shopPrice;

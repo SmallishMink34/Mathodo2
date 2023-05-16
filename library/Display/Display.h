@@ -39,6 +39,7 @@ struct ressources_s{
     SDL_Texture* background2; /*!< Texture liée à l'image du fond de l'écran. (effet parallax) */
     SDL_Texture* background3; /*!< Texture liée à l'image du fond de l'écran. (effet parallax) */
     SDL_Texture* ship; /*!< Texture liée à l'image du vaisseau. */
+    SDL_Texture* exit_shp; 
 
     SDL_Texture* meteorite; /*!< Texture liée à l'image du météorite. */
     SDL_Texture* e_rotate; /*!< Texture liée à l'image de l'élément de rotation. */

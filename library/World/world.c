@@ -118,6 +118,7 @@ void init_shop(world_t * world){
     world->ship2 = init_btn(287,143, 191, 139);
     world->ship3 = init_btn(491,138, 191, 139);
     world->ship4 = init_btn(290,308, 191, 139);
+    world->exit_shp = init_btn(670,500,100,100);
 
     world->Spr_ship = malloc(sizeof(sprite_t*)*4);
     world->Spr_ship[0] = init_sprite(world->Spr_ship[0], 74,145, 191, 139, 'x', 0);
