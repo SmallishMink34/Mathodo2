@@ -20,6 +20,15 @@
 #ifndef WORLD_H
 #define WORLD_H
 
+struct progressBarre_s{
+    SDL_Rect* Barre;
+    SDL_Rect* Contours;
+    SDL_Rect* Base;
+    int pourcent;
+};
+
+typedef struct progressBarre_s progressBarre_t;
+
 /**
  * \brief La structure qui contient les données du monde
  * 
@@ -39,15 +48,18 @@ struct world_s{
     sprite_t **murs; /*<Représentation des météorites>*/
     sprite_t **murs2; /*<Représentation des météorites et de l'air>*/
 
+    sprite_t *vaisseau1;
+    sprite_t *vaisseau2;
+    sprite_t *vaisseau3;
+    sprite_t *vaisseau4;
+
     btn_t *play;
     btn_t *exit;
     btn_t *magasin;
     btn_t *sound;
     
-    btn_t *ship1;
-    btn_t *ship2;
-    btn_t *ship3;
-    btn_t *ship4;
+    int actualship;
+    btn_t **ships;
     btn_t *exit_shp;
 
     sprite_t *BarreProgression;
@@ -59,6 +71,9 @@ struct world_s{
     sprite_t *exit_shop;
 
     sprite_t **Spr_ship;
+    progressBarre_t* pgb;
+    bool *isBought;
+    bool *isSelected;
     int *shopPrice;
     int nb_murs; // Nombre de météorites
     int nb_lines_murs; // Nombre de lignes de météorites
@@ -190,4 +205,9 @@ void init_menu(world_t *world);
  * @param world 
  */
 void init_shop(world_t * world);
+
+
+progressBarre_t *init_progressbarre(int x, int y, int w, int h, int pourcent);
+
+void updateProgressBarre (progressBarre_t *pgb, int pourcent);
 #endif

@@ -32,13 +32,18 @@
  * \param color
  * 
  */
+
+
+
 struct ressources_s{
     SDL_Texture* background; /*!< Texture liée à l'image du fond de l'écran. */
     SDL_Texture* bmenu;/*!< Texture liée à l'image du fond du menu. */
     SDL_Texture* bshop; /*!< Texture liée à l'image du fond du gameover. */
     SDL_Texture* background2; /*!< Texture liée à l'image du fond de l'écran. (effet parallax) */
     SDL_Texture* background3; /*!< Texture liée à l'image du fond de l'écran. (effet parallax) */
-    SDL_Texture* ship; /*!< Texture liée à l'image du vaisseau. */
+    SDL_Texture** ships;
+
+
     SDL_Texture* exit_shp; 
 
     SDL_Texture* meteorite; /*!< Texture liée à l'image du météorite. */
@@ -54,6 +59,9 @@ struct ressources_s{
     SDL_Texture* buy; /*!< Texture liée à l'image du bouton buy. */
     SDL_Texture* nomoney; /*!< Texture liée à l'image du bouton nomoney. */
     SDL_Texture* sell; /*!< Texture liée à l'image du bouton sell. */
+    SDL_Texture* selected;
+
+    
 
     TTF_Font *font; // Font
     SDL_Color color; // Color
@@ -61,7 +69,10 @@ struct ressources_s{
     int nb_init; /*!< Nombre d'initialisation. */
 };
 
+
 typedef struct ressources_s ressources_t;
+
+
 
 /**
  * \brief La fonction initialise les textures du jeu
@@ -181,4 +192,6 @@ void inmenu(SDL_Renderer *renderer, world_t *world,ressources_t *textures);
  * @param textures
  */
 void inshop(SDL_Renderer *renderer, world_t *world, ressources_t *textures);
+
+void draw_progressbarre(SDL_Renderer *renderer, world_t *world, progressBarre_t *pgb);
 #endif
