@@ -21,6 +21,10 @@
 #ifndef WORLD_H
 #define WORLD_H
 
+/**
+ * @brief La structure qui contient les données d'une progression barre
+ * 
+ */
 struct progressBarre_s{
     SDL_Rect* Barre;
     SDL_Rect* Contours;
@@ -84,6 +88,7 @@ struct world_s{
     int gameover; /*!< Champ indiquant si l'on est à la fin du jeu */
     float speed_h; /*!< Vitesse de déplacement horizontal des éléments du jeu */
     unsigned int startTimer; /*!< Timer de départ */
+    unsigned int startTimer2; /*!< Timer de départ (flip) */
     unsigned int timer; /*!< Timer de jeu */
     char * temps_str; // String affichant le temps sur le jeu
     char * coins_str;
@@ -209,8 +214,23 @@ void init_menu(world_t *world);
  */
 void init_shop(world_t * world);
 
-
+/**
+ * @brief La fonction qui initialise la progression barre
+ * 
+ * @param x 
+ * @param y 
+ * @param w 
+ * @param h 
+ * @param pourcent 
+ * @return progressBarre_t* 
+ */
 progressBarre_t *init_progressbarre(int x, int y, int w, int h, int pourcent);
 
+/**
+ * @brief La fonction qui met à jour la progression barre
+ * 
+ * @param pgb 
+ * @param pourcent 
+ */
 void updateProgressBarre (progressBarre_t *pgb, int pourcent);
 #endif

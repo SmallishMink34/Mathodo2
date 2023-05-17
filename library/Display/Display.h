@@ -51,7 +51,6 @@ struct ressources_s{
     SDL_Texture* coins; /*!< Texture liée à l'image des pièces. */
     SDL_Texture* finishLine; /*!< Texture liée à l'image de la ligne d'arrivée. */
     SDL_Texture* BarreProgression; /*!< Texture liée à l'image de l'air. */
-    SDL_Texture* vaisseauMini; /*!< Texture liée à l'image du vaisseau. */
 
     SDL_Texture* soleilBarre; /*!< Texture liée à l'image du soleil. */
     SDL_Texture* soleil; /*!< Texture liée à l'image du soleil. */
@@ -123,6 +122,16 @@ void apply_sprite(SDL_Renderer * renderer, SDL_Texture *texture, sprite_t *sprit
  * @param world 
  */
 void apply_sprite_fixed(SDL_Renderer * renderer, SDL_Texture *texture, sprite_t *sprite, world_t *world);
+
+/**
+ * @brief La fonction qui applique la texture \a texture sur le renderer \a renderer en fonction des données du sprite \a sprite (sans rotation sur lui meme)
+ * 
+ * @param renderer 
+ * @param texture 
+ * @param sprite 
+ * @param world 
+ */
+void apply_sprite_without_rotation(SDL_Renderer * renderer, SDL_Texture *texture, sprite_t *sprite, world_t *world);
 /**
  * \brief La fonction qui applique la texture \a texture sur le renderer \a renderer en fonction des coordonnées \a x et \a y
  * 
@@ -193,5 +202,11 @@ void inmenu(SDL_Renderer *renderer, world_t *world,ressources_t *textures);
  */
 void inshop(SDL_Renderer *renderer, world_t *world, ressources_t *textures);
 
+/**
+ * @brief La fonction qui affiche la barre de progression
+ * @param renderer 
+ * @param world 
+ * @param pgb 
+ */
 void draw_progressbarre(SDL_Renderer *renderer, world_t *world, progressBarre_t *pgb);
 #endif

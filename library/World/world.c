@@ -22,18 +22,22 @@ void update_data(world_t *world){
             }
         }
         collide(world->vaisseau, world->ligneArriver, world);
+        if (world->vaisseau->y < world->ligneArriver->y){
+            world->gamestate = 1;
+        }
         if (timer_update_s(world) != 0){
             world->temps_str[0] = '\0';
             world->temps_str = strcats(world->temps_str, 3, "temps: ",int_to_str((int)world->timer/1000), "s");
         }
-        allEvents(world);
         world->timer = SDL_GetTicks() - world->startTimer;
-        
+        allEvents(world);
     }else if(world->gamestate == 1){
         world->startTimer = SDL_GetTicks();
     }
 }
 
+/// @brief 
+/// @param world 
 void init_data(world_t * world){
     //on n'est pas à la fin du jeu
     world->gameover = 0;
@@ -50,7 +54,7 @@ void init_data(world_t * world){
     // Initialisation du vaisseau
     world->vaisseau = init_sprite(world->vaisseau, SCREEN_WIDTH/2 - SHIP_SIZE/2, SCREEN_HEIGHT - SHIP_SIZE-15, SHIP_SIZE, SHIP_SIZE, '0', 0);
     
-    world->ligneArriver = init_sprite(world->ligneArriver, 0, -world->nb_lines_murs*METEORITE_REAL_SIZE-30 , SCREEN_WIDTH, FINISH_LINE_HEIGHT, 'z', 0);
+    world->ligneArriver = init_sprite(world->ligneArriver, 0, -world->nb_lines_murs*METEORITE_REAL_SIZE-30 , SCREEN_WIDTH, FINISH_LINE_HEIGHT, 'z', 0); // Place la ligne d'arriver correctement a la fin du jeu
     world->BarreProgression = init_sprite(world->BarreProgression, 10, SCREEN_HEIGHT - 500, 50, 400, 'y', 0);
     world->vaisseauMini = init_sprite(world->vaisseauMini, 10, SCREEN_HEIGHT - 130, 20, 20, 'x', 0);
     world->soleilBarre = init_sprite(world->soleilBarre, 0, SCREEN_HEIGHT - 510, 40, 40, 'x', 0);
@@ -82,7 +86,6 @@ void init_data(world_t * world){
     world->parallax = 0;
     world->invicibility = false;
 
-
     print_sprite(world->vaisseau);
 }
 
@@ -93,14 +96,17 @@ void restart(world_t *world){
     world->vaisseauMini->y = SCREEN_HEIGHT - (110);
     world->vaisseauMini->dy = SCREEN_HEIGHT - (110);
 
-    world->ligneArriver->y = -world->nb_lines_murs*METEORITE_SIZE-30;
+    world->ligneArriver->y = -world->nb_lines_murs*METEORITE_SIZE-30; // Place la ligne d'arriver correctement a la fin du jeu
+    world->ligneArriver->x = 0;
     world->soleil->y = -world->nb_lines_murs*METEORITE_SIZE-1400;
+    world->soleil->x = SCREEN_WIDTH/2-1800/2;
     world->nb_murs = 0;
     world->speed_h = (float)INITIAL_SPEED;
     free(world->murs);
     init_walls(world);
     world->angle = 0.0;
-
+    world->parallax = 0;
+    updateProgressBarre(world->pgb, 100/(INITIAL_SPEED+6)*world->speed_h);
     modify_str(world->coin_menu_str, int_to_str(world->money));
 }
 
@@ -181,7 +187,7 @@ void collide(sprite_t *sp1, sprite_t *sp2, world_t *world){
             world->gamestate = 1;
             restart(world);
         }else if(strcmp(sp2->id, "2") == 0){
-            switch (rand() % 3){ // random entre 1 et 2
+            switch (rand() % 3){ // random entre 0 et 2
                 case 1:
                     if (world->isFlipping == 0){
                         world->isFlipping = 1;
@@ -205,12 +211,16 @@ void collide(sprite_t *sp1, sprite_t *sp2, world_t *world){
 }
 
 void flipScreen(world_t *world){
-    if (world->timer - world->startTimer > 1){
+    if (world->timer - world->startTimer2 > 1){
         if (world->isFlipping == 1){
             world->angle += M_PI/20;
+            world->speed_h = 0.0;
             if (world->angle > M_PI){
+                world->speed_h = (float)INITIAL_SPEED;
                 world->angle = M_PI;
                 world->isFlipping = -2;
+                world->soleil->x = SCREEN_WIDTH/2;
+                world->ligneArriver->x = SCREEN_WIDTH;
             }
         }else if(world->isFlipping == -1){
             world->angle -= M_PI/20;
@@ -219,7 +229,7 @@ void flipScreen(world_t *world){
                 world->isFlipping = 0;
             }
         }
-        world->startTimer = SDL_GetTicks();
+        world->startTimer2 = SDL_GetTicks();
         
     }
 }

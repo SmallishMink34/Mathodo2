@@ -1,3 +1,15 @@
+/**
+ * \file menu.h
+ * \author M Moulias 
+ * \brief Fichier qui contient les fonctions liées au menu 
+ * \version 0.1
+ * \date 2023-04-05
+ * 
+ * @copyright Copyright (c) 2023
+ * 
+ */
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "../../src/include/SDL2/SDL.h"

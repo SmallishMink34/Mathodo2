@@ -24,6 +24,12 @@
  */
 char * strcats(char* dest, int num_args, ...);
 
+/**
+ * @brief Modify un str par un autre
+ * 
+ * @param str 
+ * @param str2 
+ */
 void modify_str(char *str, char *str2);
 /**
  * \brief Convertit un entier en chaine de caractère

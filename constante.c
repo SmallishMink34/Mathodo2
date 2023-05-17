@@ -43,7 +43,7 @@
   * \brief Vitesse initiale de déplacement vertical des éléments du jeu 
 */
 
-#define INITIAL_SPEED 2
+#define INITIAL_SPEED 6
 
 /**
  * \brief Nombre de lignes de météorites

@@ -81,7 +81,10 @@ int test_init_data(world_t * world){
 }
 
 int test_update_data(world_t * world){
+    world->gamestate = 0;
+    printf(" world->ligneArriver->y : %d\n",  world->ligneArriver->y);
     update_data(world);
+    printf(" world->ligneArriver->y : %d\n",  world->ligneArriver->y);
     return 1; // Pas d'erreur
 }
 
@@ -140,6 +143,53 @@ int test_InitMenu(world_t *world){
     return 1; // Pas d'erreur
 }
 
+int test_strcats(){
+    char *str = malloc(sizeof(char)*100);
+    strcats(str, 3, "test", "test2", "test3");
+    printf("strcats : %s\n", str);
+    free(str);
+    return 1; // Pas d'erreur
+}
+
+int test_modify_str(){
+    char *str = malloc(sizeof(char)*100);
+    modify_str(str, "test");
+    printf("modify_str : %s\n", str);
+    free(str);
+    return 1; // Pas d'erreur
+}
+
+int test_int_to_str(){
+    char *str = int_to_str(123);
+    printf("int_to_str : %s\n", str);
+    free(str);
+    return 1; // Pas d'erreur
+}
+
+int test_lire_file(){
+    printf("Trop compliquer a test");
+    return 1; // Pas d'erreur
+}
+
+int test_number_of_numbers(){
+    printf("number_of_numbers : %d\n", number_of_numbers(123));
+    return 1; // Pas d'erreur
+}
+
+int test_init_btn(){
+    btn_t *btn = init_btn(0, 0, 0, 0);
+    printf("test_init_btn : %d\n", btn->rect.x);
+    free(btn);
+    return 1; // Pas d'erreur
+}
+
+int test_collidePoint(){
+    btn_t *btn = init_btn(0, 0, 0, 0);
+    printf("test_collidePoint : %d\n", collidePoint(btn, 0, 0));
+    free(btn);
+    return 1; // Pas d'erreur
+}
+
 int main( int argc, char* args[] ){
     printf("Nombre de test : 23\n");
     SDL_Event event;
@@ -160,10 +210,10 @@ int main( int argc, char* args[] ){
     compteur_test += test_init_ressource(renderer, &textures);
     compteur_test += test_apply_background_parralax(renderer, textures.background, &world, 1);
     compteur_test += test_apply_background(renderer, textures.background, &world);
-    compteur_test += test_apply_sprite(renderer, textures.ship, world.vaisseau, &world);
-    compteur_test += test_apply_sprite_fixed(renderer, textures.ship, world.vaisseau, &world);
-    compteur_test += test_apply_walls(renderer, textures.ship, &world, &textures);
-    compteur_test += test_apply_wall(renderer, textures.ship, 0, 0, &world);
+    compteur_test += test_apply_sprite(renderer, textures.ships[0], world.vaisseau, &world);
+    compteur_test += test_apply_sprite_fixed(renderer, textures.ships[0], world.vaisseau, &world);
+    compteur_test += test_apply_walls(renderer, textures.ships[0], &world, &textures);
+    compteur_test += test_apply_wall(renderer, textures.ships[0], 0, 0, &world);
     compteur_test += test_refresh_graphics(renderer, &world, &textures);
     compteur_test += test_inmenu(renderer, &world, &textures);
     compteur_test += test_ingame(renderer, &world, &textures);
@@ -182,10 +232,20 @@ int main( int argc, char* args[] ){
     compteur_test += test_allEvents(&world);
     compteur_test += test_InitMenu(&world);
     /*--------------------------Sprite--------------------------*/
-
+    //Compliquer a faire vu que c'est des sprites
     /*--------------------------Utility--------------------------*/
+    
+    compteur_test += test_strcats();
+    compteur_test += test_modify_str();
+    compteur_test += test_int_to_str();
+    compteur_test += test_lire_file();
+    compteur_test += test_number_of_numbers();
 
     /*--------------------------menu--------------------------*/
+    compteur_test += test_init_btn();
+    compteur_test += test_collidePoint();
+    /*--------------------------mixer--------------------------*/
+    //Compliquer a faire vu que c'est du son
     //mise à jour des données liée à la physique du monde
     update_data(&world);
     

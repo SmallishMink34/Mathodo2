@@ -18,7 +18,7 @@ $(PROG): $(OBJ)
 
 test:
 	gcc -O3 -Dmain=SDL_main -c test.c -I src/include -o test.o
-	gcc -O3 -Dmain=SDL_main test.o sdl2-light.o sdl2-ttf-light.o library/Display/Display.o library/World/world.o library/Sprites/sprites.o library/utility/utility.o library/menu/menu.o -lm -lmingw32 -lSDL2main -lSDL2 -lSDL2_ttf -lSDL2_image -o test.exe -L src/lib
+	gcc -O3 -Dmain=SDL_main test.o sdl2-light.o sdl2-ttf-light.o library/Display/Display.o library/World/world.o library/Sprites/sprites.o library/utility/utility.o library/menu/menu.o library/mixer/mixer.o -lm -lmingw32 -lSDL2main -lSDL2 -lSDL2_ttf -lSDL2_image -lSDL2_mixer -o test.exe -L src/lib
 
 doc: $(PROG)
 	doxygen $(PROG)

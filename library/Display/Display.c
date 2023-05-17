@@ -20,7 +20,7 @@ void init_ressource(SDL_Renderer *renderer, ressources_t *textures){
     textures->color = (SDL_Color){255, 255, 255, 255};
 
     textures->BarreProgression = load_image( "ressources/Elements/BarreProgression.png",renderer);
-    textures->vaisseauMini = textures->ships[0];
+    
 
     textures->soleilBarre = load_image( "ressources/Elements/soleil.png",renderer);
     textures->soleil = load_image( "ressources/Elements/soleil.png",renderer);
@@ -33,7 +33,7 @@ void init_ressource(SDL_Renderer *renderer, ressources_t *textures){
 
     textures->nb_init = 19;
     init_ressource_element(renderer, textures);
-    
+    printf("aaa");
 }
 
 void init_ressource_element(SDL_Renderer *renderer, ressources_t *textures){
@@ -45,7 +45,7 @@ void init_ressource_element(SDL_Renderer *renderer, ressources_t *textures){
 
 void apply_background_parralax(SDL_Renderer *renderer, SDL_Texture *texture, world_t *world, int parallax){
     if(texture != NULL){
-        apply_texture(texture, renderer, 0, (int)(-1800+(world->parallax/parallax)), world->angle*180/M_PI);
+        apply_texture(texture, renderer, 0, (int)(-1800+(world->parallax/parallax)), 0);
     }
 }
 
@@ -64,7 +64,21 @@ void apply_sprite(SDL_Renderer * renderer, SDL_Texture *texture, sprite_t *sprit
         rect.w = sprite->w;
         rect.h = sprite->h;
 
+            
         SDL_RenderCopyEx(renderer, texture, NULL, &rect, world->angle*180/M_PI, NULL, SDL_FLIP_NONE);
+    }
+}
+
+void apply_sprite_without_rotation(SDL_Renderer * renderer, SDL_Texture *texture, sprite_t *sprite, world_t *world){
+    if(texture != NULL){
+        SDL_Rect rect;
+        rect.x = SCREEN_WIDTH/2 + (sprite->x - SCREEN_WIDTH/2) * cos(world->angle) - (sprite->y - SCREEN_HEIGHT/2) * sin(world->angle);
+        rect.y = SCREEN_HEIGHT/2 + (sprite->x - SCREEN_WIDTH/2) * sin(world->angle) + (sprite->y - SCREEN_HEIGHT/2) * cos(world->angle);
+
+        rect.w = sprite->w;
+        rect.h = sprite->h;
+            
+        SDL_RenderCopyEx(renderer, texture, NULL, &rect, 0, NULL, SDL_FLIP_NONE);
     }
 }
 
@@ -181,7 +195,7 @@ void ingame(SDL_Renderer *renderer, world_t *world,ressources_t *textures){
     
     // HUD
     apply_sprite_fixed(renderer, textures->BarreProgression, world->BarreProgression, world);
-    apply_sprite_fixed(renderer, textures->vaisseauMini, world->vaisseauMini, world);
+    apply_sprite_fixed(renderer, textures->ships[world->actualship], world->vaisseauMini, world);
     apply_sprite_fixed(renderer, textures->soleilBarre, world->soleilBarre, world);
     apply_sprite_fixed(renderer, textures->coins, world->coins, world);
     draw_progressbarre(renderer, world, world->pgb);
@@ -208,7 +222,7 @@ void clean_textures(ressources_t *textures){
     SDL_DestroyTexture(textures->meteorite);
     SDL_DestroyTexture(textures->finishLine);
     SDL_DestroyTexture(textures->BarreProgression);
-    SDL_DestroyTexture(textures->vaisseauMini);
+
     SDL_DestroyTexture(textures->soleilBarre);
     SDL_DestroyTexture(textures->soleil);
     SDL_DestroyTexture(textures->coins);
