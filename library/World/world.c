@@ -24,6 +24,7 @@ void update_data(world_t *world){
         collide(world->vaisseau, world->ligneArriver, world);
         if (world->vaisseau->y < world->ligneArriver->y){
             world->gamestate = 1;
+            restart(world);
         }
         if (timer_update_s(world) != 0){
             world->temps_str[0] = '\0';
@@ -183,7 +184,7 @@ void init_shop(world_t * world){
 
 void collide(sprite_t *sp1, sprite_t *sp2, world_t *world){
     if (sprites_collide(sp1, sp2)){
-        if (strcmp(sp2->id, "1") == 0){
+        if (strcmp(sp2->id, "1") == 0){ // Si le sprite est un mur
             world->gamestate = 1;
             restart(world);
         }else if(strcmp(sp2->id, "2") == 0){
@@ -200,7 +201,7 @@ void collide(sprite_t *sp1, sprite_t *sp2, world_t *world){
                     break;
             }
             remove_wall(world, sp2->indice);
-        }else if(strcmp(sp2->id, "z") == 0){
+        }else if(strcmp(sp2->id, "z") == 0){ // Si le sprite est la ligne d'arrivée
             world->gamestate = 1;
             restart(world);
         }else if(strcmp(sp2->id, "3") == 0){

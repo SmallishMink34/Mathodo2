@@ -53,7 +53,6 @@ void handle_events(SDL_Event *event,world_t *world){
                     case SDLK_z:
                         if (world->speed_h < INITIAL_SPEED+6){
                             world->speed_h += 1;
-                            printf("%f\n", world->speed_h);
                             updateProgressBarre(world->pgb, 100.0/(float)(INITIAL_SPEED+6)*(world->speed_h));
                             
                         }
@@ -79,10 +78,10 @@ void handle_events(SDL_Event *event,world_t *world){
         if (event->type == SDL_MOUSEBUTTONDOWN){
             if (world->gamestate == 1){
                 if (event->button.button == SDL_BUTTON_LEFT){
-                    printf("mouse(%d, %d) world rect (%d %d %d %d)\n", world->mouseX, world->mouseY, world->play->rect.x,world->play->rect.y,world->play->rect.w,world->play->rect.h );
                     if (collidePoint(world->play, world->mouseX, world->mouseY)){
                         modify_str(world->coins_str, int_to_str(world->money));
                         world->gamestate = 0;
+                        
                     }
                     if (collidePoint(world->magasin, world->mouseX, world->mouseY)){
                         world->gamestate = 2;
@@ -116,7 +115,6 @@ void handle_events(SDL_Event *event,world_t *world){
                         }
                     }
                     if (collidePoint(world->exit_shp, world->mouseX, world->mouseY)){
-                        printf("exit");
                         world->gamestate=1;
                     }
                 }
@@ -176,7 +174,7 @@ int main( int argc, char* args[] )
         frameTime = SDL_GetTicks() - ticks;
         //gestion des évènements
         handle_events(&event,&world);
-        
+        printf("gamestate : %d\n", world.gamestate);
         //mise à jour des données liée à la physique du monde
         update_data(&world);
         

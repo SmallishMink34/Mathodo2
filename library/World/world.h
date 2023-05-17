@@ -119,6 +119,13 @@ typedef struct world_s world_t;
 void init_data(world_t * world);
 
 /**
+ * @brief La fonction qui initialise les données du monde
+ * 
+ * @param world 
+ */
+void restart(world_t *world);
+
+/**
  * \brief La fonction met à jour les données en tenant compte de la physique du monde
  * \param les données du monde
  */
