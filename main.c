@@ -12,6 +12,7 @@
 #include "library/Display/Display.h"
 #include "library/World/world.h"
 #include "library/utility/utility.h"
+#include "library/mixer/mixer.h"
 #include "constante.c"
 #include <time.h>
 
@@ -141,10 +142,11 @@ void handle_events(SDL_Event *event,world_t *world){
 void init(SDL_Window **window, SDL_Renderer ** renderer, ressources_t *textures, world_t * world){
     init_sdl(window,renderer,SCREEN_WIDTH, SCREEN_HEIGHT);
     srand(time(0));
+    init_mixer();
     init_data(world);
     // Initialisation du ttf
     init_ttf();
-   
+    
     init_ressource(*renderer,textures);
     
 }
@@ -153,6 +155,7 @@ void init(SDL_Window **window, SDL_Renderer ** renderer, ressources_t *textures,
 /**
  *  \brief programme principal qui implémente la boucle du jeu
  */
+
 
 
 int main( int argc, char* args[] )

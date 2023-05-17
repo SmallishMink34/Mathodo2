@@ -1,4 +1,5 @@
 #include "world.h"
+
 #include "../utility/utility.h"
 
 void update_data(world_t *world){
@@ -67,6 +68,9 @@ void init_data(world_t * world){
     world->coins_str[0] = '\0';
     world->coins_str = strcats(world->coins_str, 1, "0");
     world->actualship = 0;
+
+    world->musique = init_music("ressources/sons/music.mp3");
+    play_music(world->musique, -1);
 
     world->angle = 0.0;
     world->isFlipping = 0;
@@ -177,7 +181,7 @@ void collide(sprite_t *sp1, sprite_t *sp2, world_t *world){
             world->gamestate = 1;
             restart(world);
         }else if(strcmp(sp2->id, "2") == 0){
-            switch (rand() % 3){
+            switch (rand() % 3){ // random entre 1 et 2
                 case 1:
                     if (world->isFlipping == 0){
                         world->isFlipping = 1;
@@ -286,6 +290,9 @@ void clean_data(world_t *world){
     free(world->Spr_ship);
     free(world->shopPrice);
     free(world->coin_menu_str);
+    free(world->exit_shp);  
+    Mix_FreeMusic(world->musique);
+    Mix_CloseAudio();
 
     printf("clean_data");   
 }

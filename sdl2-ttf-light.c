@@ -10,6 +10,7 @@ void init_ttf(){
 
 
 
+
 TTF_Font * load_font(const char *path, int font_size){
     TTF_Font *font = TTF_OpenFont(path, font_size);
     if(font == NULL){

@@ -5,6 +5,7 @@
 #include "../../src/include/SDL2/SDL.h"
 #include <stdbool.h>
 #include "../menu/menu.h"
+#include "../mixer/mixer.h"
 
 /**
  * \file world.h
@@ -57,6 +58,8 @@ struct world_s{
     btn_t *exit;
     btn_t *magasin;
     btn_t *sound;
+
+    Mix_Music* musique;
     
     int actualship;
     btn_t **ships;
